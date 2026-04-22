@@ -8,10 +8,12 @@ Live at [matthewduke1.github.io/github-activity](https://matthewduke1.github.io/
 
 | Metric | Count |
 |--------|-------|
-| Merged Pull Requests | 109 |
-| Commits | 213+ |
+| Merged Pull Requests (lifetime) | 102 |
+| Commits (lifetime, all repos) | 685 |
+| Commits (April 2026) | 84 |
+| Lines Changed (April 2026) | 18,000+ |
+| Private Repositories | 25 |
 | Hours Saved / Year (across apps) | 170+ |
-| Lines Changed (April 2026) | 8,000+ |
 
 ## Featured Apps
 

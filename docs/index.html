@@ -303,6 +303,87 @@
       .profile-meta { justify-content: center; }
       .topbar-links { display: none; }
     }
+
+    /* Resume modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(1, 4, 9, 0.75);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      z-index: 1000;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+    .modal-overlay.is-open { display: flex; }
+    body.modal-lock { overflow: hidden; }
+    .modal {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 860px;
+      position: relative;
+      box-shadow: 0 16px 70px rgba(0,0,0,0.6);
+      animation: modalIn 0.18s ease-out;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: var(--bg);
+      border-radius: 12px 12px 0 0;
+      z-index: 1;
+    }
+    .modal-title { font-size: 16px; font-weight: 600; color: var(--text); }
+    .modal-close {
+      background: transparent; border: none; cursor: pointer;
+      color: var(--text-muted); padding: 6px; border-radius: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .modal-close:hover { background: var(--bg-hover); color: var(--text); }
+    .modal-close svg { fill: currentColor; }
+    .modal-body { padding: 24px 28px 32px; color: var(--text); font-size: 14px; line-height: 1.6; }
+    .resume-head { text-align: center; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
+    .resume-head h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; }
+    .resume-contact { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+    .resume-contact a { color: var(--text-muted); }
+    .resume-contact a:hover { color: var(--accent); }
+    .resume-section { margin-top: 22px; }
+    .resume-section h3 {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--accent-hover); font-weight: 700;
+      padding-bottom: 6px; border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .resume-job { margin-bottom: 18px; }
+    .resume-job-head {
+      display: flex; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .resume-job-title { font-weight: 600; color: var(--text); font-size: 14px; }
+    .resume-job-company { color: var(--text-muted); font-style: italic; }
+    .resume-job-dates { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
+    .resume-job ul { margin: 6px 0 0 18px; color: var(--text); }
+    .resume-job li { margin-bottom: 4px; }
+    .resume-profile { color: var(--text); }
+    .resume-skills-block { margin-bottom: 10px; font-size: 13px; }
+    .resume-skills-block strong { color: var(--text); }
+    .resume-skills-block span { color: var(--text-muted); }
+    @media (max-width: 640px) {
+      .modal-body { padding: 18px 18px 24px; }
+      .resume-head h2 { font-size: 22px; }
+      .resume-job-dates { white-space: normal; }
+    }
   </style>
 </head>
 <body>
@@ -333,6 +414,10 @@
           <div class="handle">MatthewDuke1</div>
           <p class="bio">I design the things you aren't thinking about or don't venture to try. Apps should be stupid simple to pick up and put down.</p>
           <div style="margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary" id="openResumeBtn" aria-haspopup="dialog" aria-controls="resumeModal">
+              <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M2 1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 8 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg>
+              View my resume
+            </button>
             <a class="btn" href="https://github.com/MatthewDuke1" target="_blank" rel="noopener">Follow on GitHub</a>
           </div>
           <div class="profile-meta">
@@ -544,6 +629,157 @@
       Last updated April 2026 &middot; Theme based on GitHub Dark Mode
     </div>
   </div>
+
+  <!-- Resume modal -->
+  <div class="modal-overlay" id="resumeModal" role="dialog" aria-modal="true" aria-labelledby="resumeModalTitle" hidden>
+    <div class="modal" role="document">
+      <div class="modal-header">
+        <div class="modal-title" id="resumeModalTitle">Matt Duke &mdash; Resume</div>
+        <button type="button" class="modal-close" id="closeResumeBtn" aria-label="Close resume">
+          <svg height="18" viewBox="0 0 16 16" width="18"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="resume-head">
+          <h2>Matt Duke</h2>
+          <div class="resume-contact">
+            Dallas, TX &middot; +1 (619) 756-5184 &middot;
+            <a href="mailto:matthewduke0@gmail.com">matthewduke0@gmail.com</a><br>
+            US Citizen &middot; Active Secret Clearance<br>
+            <a href="https://www.linkedin.com/in/the-duke/" target="_blank" rel="noopener">LinkedIn</a> &middot;
+            <a href="https://the-duke.org/" target="_blank" rel="noopener">the-duke.org</a>
+          </div>
+        </div>
+
+        <div class="resume-section">
+          <h3>Profile</h3>
+          <p class="resume-profile">Results-driven Product Leader with deep expertise in AI platforms, GTM strategy, cloud ecosystems, and zero-to-one implementations. Excel at managing product portfolios and large cross-functional teams (45+ people) and driving product innovation within highly regulated environments.</p>
+        </div>
+
+        <div class="resume-section">
+          <h3>Work Experience &mdash; 10 Years</h3>
+
+          <div class="resume-job">
+            <div class="resume-job-head">
+              <div><span class="resume-job-title">Product Leader</span> &middot; <span class="resume-job-company">Deloitte</span></div>
+              <div class="resume-job-dates">Mar 2021 &mdash; Present</div>
+            </div>
+            <ul>
+              <li>Manage a $1.2B cyber pipeline via technical leadership, GTM strategy, client execution, and business development. Alliance Manager for Splunk, Cribl, and Databricks partnerships.</li>
+              <li>Led Deloitte &amp; Amazon (AWS) partnership ConvergeSecurity: exploring customer needs and building out cyber features.</li>
+              <li>Leader in the creation and deployment of the Datalake + AI Detection platform, generating over $50M in sales. Led GTM for AI algorithms that significantly enhanced threat detection across government, global, and commercial clients.</li>
+              <li>Directed strategic development and operational management of the MXDR and CAE SIEM platforms, leading a team of 17 to deliver cloud-based solutions that improved real-time threat response and client retention.</li>
+              <li>Orchestrated go-to-market strategies and pricing structures that unified Deloitte's cybersecurity offerings into Cybersphere, enhancing market competitiveness and customer adoption.</li>
+              <li>Led and sold a new SOC-based Agentic AI greenfield product from concept to completion, leveraging existing partnerships to boost sales.</li>
+              <li>Pioneered the ISAM project to integrate robotics and AI in aerospace manufacturing. Executed AWS optimizations that saved over $1M annually for Fortune-50 clients.</li>
+            </ul>
+          </div>
+
+          <div class="resume-job">
+            <div class="resume-job-head">
+              <div><span class="resume-job-title">Lead Product Solutions Engineer / AWS Architect</span> &middot; <span class="resume-job-company">MasVida Health Care Solutions</span></div>
+              <div class="resume-job-dates">May 2020 &mdash; Mar 2021</div>
+            </div>
+            <ul>
+              <li>Sole Product &amp; Technical Architect for a portfolio of 4 companies across health-tech, manufacturing, insurance, and real estate.</li>
+              <li>Architected, designed, and implemented an LMS for clients including ABM, CBRE, and Cushman &amp; Wakefield, supporting 25,000+ MAU. Enhanced engagement via A/B testing and heat-mapping.</li>
+              <li>Engineered system optimizations that resulted in a 37% reduction in operational technology costs across multiple client organizations.</li>
+              <li>Authored Lambda functions for real-time firewall log analysis (Watchguard), presenting findings to C-suite to secure buy-in for further data engineering efforts.</li>
+            </ul>
+          </div>
+
+          <div class="resume-job">
+            <div class="resume-job-head">
+              <div><span class="resume-job-title">Product Solutions Architect</span> &middot; <span class="resume-job-company">Active Interest Media (AIM)</span></div>
+              <div class="resume-job-dates">Apr 2019 &mdash; May 2020</div>
+            </div>
+            <ul>
+              <li>Architectural design and deployment leader of FitPost, a B2B2C social media app for personal trainers, achieving 50,000+ MAU.</li>
+              <li>Directed UI/UX testing (A/B, QA) which improved feature adoption by 30% and increased MAUs by 22%.</li>
+              <li>Managed dev and marketing team sync via Hubspot CRM, integrating Facebook (Meta) and Twitter (X) APIs to enhance community growth.</li>
+              <li>Orchestrated the full SDLC using agile methodologies to accelerate delivery and exceed performance targets.</li>
+              <li>Partnered with UX/UI and QA teams to enforce user-centric design, resulting in fewer bugs and improved product reliability.</li>
+            </ul>
+          </div>
+
+          <div class="resume-job">
+            <div class="resume-job-head">
+              <div><span class="resume-job-title">Product Solutions Expert</span> &middot; <span class="resume-job-company">Novelty Media</span></div>
+              <div class="resume-job-dates">Jan 2018 &mdash; Apr 2019</div>
+            </div>
+            <ul>
+              <li>Led ad-tech innovations using data analytics and ML to automate content personalization, boosting engagement and supporting client acquisition in the saturated mar-tech space.</li>
+              <li>Spearheaded the redesign of Novelty Media's UI, increasing CTR by 57% and user retention by 19% through strategic content optimization and AI analytics for predictive behavior modeling.</li>
+            </ul>
+          </div>
+
+          <div class="resume-job">
+            <div class="resume-job-head">
+              <div><span class="resume-job-title">Developer / Consultant</span> &middot; <span class="resume-job-company">Freelance</span></div>
+              <div class="resume-job-dates">Mar 2016 &mdash; Apr 2019</div>
+            </div>
+            <ul>
+              <li>Revamped AmegoEV's UI using user feedback and advanced analytics, resulting in a 46% increase in annual revenue and $730K growth QoQ. Led end-to-end market research, development, and product vision for Wiseattend.com.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="resume-section">
+          <h3>Education &amp; Certifications</h3>
+          <p><strong>B.S. in Computer Science</strong> &mdash; University of Southern California (USC)</p>
+          <p style="margin-top: 10px; color: var(--text-muted); font-size: 13px;">
+            AWS Certified Machine Learning &middot; Security+ &middot; CISSP (In View) &middot; AWS Solutions Architect Associate (SAA-C02) &middot; AWS Developer Associate &middot; Certified Scrum Product Owner (CSPO) &middot; Microsoft Azure Fundamentals (AZ-900) &middot; AZ-500 Security Engineer (Koenig Solutions) &middot; Claude in Amazon Bedrock &middot; Professional Scrum Master &middot; Databricks Fundamentals &amp; Agentic AI Fundamentals &middot; Cribl Certified User &amp; Cribl Admin Stream (L1 &amp; L2) &middot; Kubernetes Fundamentals
+          </p>
+        </div>
+
+        <div class="resume-section">
+          <h3>Skills</h3>
+          <div class="resume-skills-block">
+            <strong>Technical:</strong>
+            <span>Strategic Product Management &middot; Go-To-Market zero-to-one &middot; Data Engineering Leader &middot; Product Lifecycle Planning &middot; Market Analysis &amp; Competitor Research &middot; Agile Project Leadership &middot; Cloud Security Best Practices &middot; Risk Assessment &amp; Mitigation &middot; Regulatory Compliance (HIPAA, PHI, GDPR) &middot; Cross-Functional Team Leadership &middot; Product-Market Fit Analysis &middot; Data-Driven Decision Making &middot; Customer Experience Enhancement &middot; Prototype Development &amp; Testing &middot; Stakeholder Engagement &middot; Contract Negotiation &amp; Vendor Management &middot; Sales Strategy &amp; Market Penetration &middot; Budget Management &amp; Cost Optimization &middot; Scrum and Agile Methodologies</span>
+          </div>
+          <div class="resume-skills-block">
+            <strong>Software:</strong>
+            <span>Python &middot; JavaScript &middot; PHP &middot; SQL &middot; React &middot; Tableau &middot; Power BI &middot; Figma &middot; Cribl &middot; Splunk &middot; Databricks &middot; Snowflake &middot; Adobe Suite &middot; Aha!</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var overlay = document.getElementById('resumeModal');
+      var openBtn = document.getElementById('openResumeBtn');
+      var closeBtn = document.getElementById('closeResumeBtn');
+      var lastFocus = null;
+
+      function open() {
+        lastFocus = document.activeElement;
+        overlay.hidden = false;
+        overlay.classList.add('is-open');
+        document.body.classList.add('modal-lock');
+        closeBtn.focus();
+      }
+      function close() {
+        overlay.classList.remove('is-open');
+        overlay.hidden = true;
+        document.body.classList.remove('modal-lock');
+        if (lastFocus) lastFocus.focus();
+      }
+
+      openBtn.addEventListener('click', open);
+      closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) close();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('is-open')) close();
+      });
+    })();
+  </script>
 
 </body>
 </html>

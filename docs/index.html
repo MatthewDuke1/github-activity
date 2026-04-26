@@ -217,6 +217,60 @@
     .repo-stats { display: flex; gap: 12px; margin-left: auto; }
     .repo-stats svg { fill: var(--text-muted); vertical-align: middle; margin-right: 2px; }
 
+    /* Product vision dropdown */
+    .vision {
+      margin-top: 12px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .vision summary {
+      cursor: pointer;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-hover);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+      user-select: none;
+    }
+    .vision summary::-webkit-details-marker { display: none; }
+    .vision summary:hover { background: var(--bg-hover); }
+    .vision summary::before {
+      content: '\25B6';
+      font-size: 9px;
+      transition: transform 0.2s;
+      display: inline-block;
+      color: var(--text-muted);
+    }
+    .vision[open] summary::before { transform: rotate(90deg); }
+    .vision-body {
+      padding: 10px 14px 14px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+      border-top: 1px solid var(--border-muted);
+    }
+    .vision-body p + p { margin-top: 8px; }
+    .vision-body strong { color: var(--accent-hover); }
+    .vision-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--purple);
+      background: rgba(163, 113, 247, 0.12);
+      border: 1px solid rgba(163, 113, 247, 0.35);
+      padding: 1px 7px;
+      border-radius: 2em;
+      margin-left: auto;
+    }
+
     /* Product links row on repo cards */
     .repo-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .repo-links a {
@@ -419,6 +473,13 @@
               Source
             </a>
           </div>
+          <details class="vision">
+            <summary>Product Vision <span class="vision-tag">Productivity &amp; QOL</span></summary>
+            <div class="vision-body">
+              <p>Forgetting a birthday isn't a memory problem &mdash; it's a calendar and queue problem. This is a pure <strong>productivity and quality-of-life tool</strong>: it ingests the contacts you already have (Google, Apple, Outlook, CSV), schedules advance reminders so you have time to pick something thoughtful, and drafts personalized email copy with integrated gift search so you go from <em>"oh no, today?"</em> to <em>"sent"</em> in under a minute.</p>
+              <p>The result: no more awkward "happy belated" texts, and roughly <strong>50 hours/yr</strong> of background mental overhead reclaimed &mdash; the quiet anxiety of wondering which relationships you're letting slip just goes away.</p>
+            </div>
+          </details>
         </div>
 
         <div class="repo-card">
@@ -445,6 +506,13 @@
               Source
             </a>
           </div>
+          <details class="vision">
+            <summary>Product Vision <span class="vision-tag">Anti-Annoyance</span></summary>
+            <div class="vision-body">
+              <p>A <strong>simple scripting tool that runs in Chrome or Firefox</strong> &mdash; nothing more. It doesn't scan the page, doesn't shove a chatbot at you, doesn't ship your queries off to a third-party LLM, and doesn't burn CPU on every site you visit. It just quietly surfaces the customer service email, phone number, or business hours that the page is already trying to bury.</p>
+              <p>That's the whole point: <strong>bypass the annoyance economy</strong>. No login walls, no "let me connect you to an agent," no chatbot sycophancy. Saves the average user <strong>up to 20 hours/yr</strong> with effectively zero compute cost &mdash; you'll never notice it's running until you need it.</p>
+            </div>
+          </details>
         </div>
 
         <div class="repo-card">
@@ -471,6 +539,13 @@
               Source
             </a>
           </div>
+          <details class="vision">
+            <summary>Product Vision <span class="vision-tag">Decision Shortcut</span></summary>
+            <div class="vision-body">
+              <p>The AI tooling landscape is overwhelming &mdash; hundreds of products, every landing page promising to change your life, and most newcomers waste days bouncing between demos trying to figure out which one actually fits their use case.</p>
+              <p>This guide flips the model: <strong>pick a goal, get a curated shortlist</strong>. 100+ tools across 12 categories, with the free credits, real differentiators, and gotchas surfaced upfront so you can make a decision in minutes instead of weeks. Collapses what's normally a <strong>~75 hour</strong> evaluation slog into a 10-minute one &mdash; with no signup, no email capture, no upsell.</p>
+            </div>
+          </details>
         </div>
 
       </div>

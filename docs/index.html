@@ -531,18 +531,23 @@
             <a class="repo-name" href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app" target="_blank" rel="noopener">birthday-reminder-gifting-app</a>
             <span class="repo-visibility">Public</span>
           </div>
-          <p class="repo-desc">Compose personalized birthday emails with gift search integration. Imports from Google Calendar, Apple Contacts, Outlook, and CSV. Configurable advance reminders so you never miss a birthday.</p>
+          <p class="repo-desc">Remembers birthdays and emails you a week ahead &mdash; with Etsy and Amazon gift links chosen from how each person is filed. Runs on a schedule in AWS, so it works whether or not a browser is open. Imports from Google Calendar, Apple Contacts, Outlook, and CSV. <strong style="color: var(--text);">Deployable to your own AWS account in one command.</strong></p>
           <div class="repo-meta">
             <div class="repo-lang">
               <span class="lang-dot dot-html"></span>
-              <span>HTML</span>
+              <span>HTML &middot; Node 20 &middot; CloudFormation</span>
             </div>
             <span>Saves ~50 hrs/yr</span>
+            <span>~$0/mo to run</span>
           </div>
           <div class="repo-links">
             <a href="https://matthewduke1.github.io/birthday-reminder-gifting-app/" target="_blank" rel="noopener">
               <svg height="12" viewBox="0 0 16 16" width="12"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25Zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0Z"></path></svg>
               Live app
+            </a>
+            <a href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app/tree/main/deploy" target="_blank" rel="noopener">
+              <svg height="12" viewBox="0 0 16 16" width="12"><path d="M7.25 1.25a.75.75 0 0 1 1.5 0v6.44l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 0 1 1.06-1.06l1.72 1.72V1.25ZM2 12.25a.75.75 0 0 1 .75.75v1.25h10.5V13a.75.75 0 0 1 1.5 0v1.5a.75.75 0 0 1-.75.75H1.75a.75.75 0 0 1-.75-.75V13a.75.75 0 0 1 .75-.75Z"></path></svg>
+              Deploy your own
             </a>
             <a href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app" target="_blank" rel="noopener">
               <svg height="12" viewBox="0 0 16 16" width="12"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
@@ -552,8 +557,27 @@
           <details class="vision">
             <summary>Product Vision <span class="vision-tag">Productivity &amp; QOL</span></summary>
             <div class="vision-body">
-              <p>Forgetting a birthday isn't a memory problem &mdash; it's a calendar and queue problem. This is a pure <strong>productivity and quality-of-life tool</strong>: it ingests the contacts you already have (Google, Apple, Outlook, CSV), schedules advance reminders so you have time to pick something thoughtful, and drafts personalized email copy with integrated gift search so you go from <em>"oh no, today?"</em> to <em>"sent"</em> in under a minute.</p>
+              <p>Forgetting a birthday isn't a memory problem &mdash; it's a calendar and queue problem. This is a pure <strong>productivity and quality-of-life tool</strong>: it ingests the contacts you already have (Google, Apple, Outlook, CSV), emails you a week ahead so you have time to pick something thoughtful, and puts the shopping links right in that email.</p>
               <p>The result: no more awkward "happy belated" texts, and roughly <strong>50 hours/yr</strong> of background mental overhead reclaimed &mdash; the quiet anxiety of wondering which relationships you're letting slip just goes away.</p>
+            </div>
+          </details>
+          <details class="vision">
+            <summary>Run it yourself <span class="vision-tag">One command &middot; ~$0/mo</span></summary>
+            <div class="vision-body">
+              <p>The whole backend is one CloudFormation template. It builds the database, both functions, the API, the daily schedule, and scoped IAM roles <strong>in your own AWS account</strong> &mdash; nothing reports back to mine.</p>
+              <p style="font-family:monospace;font-size:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">aws cloudformation deploy --template-file deploy/template.yaml \<br />&nbsp;&nbsp;--stack-name bdayapp --capabilities CAPABILITY_IAM</p>
+              <p><strong style="color: var(--text);">What you get</strong></p>
+              <ul style="margin:6px 0 12px 18px;padding:0;">
+                <li>Automatic reminders at 7 days, 1 day, and day-of &mdash; sent whether or not a browser is open</li>
+                <li>Etsy and Amazon gift links in the email, with the search chosen from how each person is filed (a "Sister" gets <em>gifts for sister</em>; a note like <em>loves pottery</em> takes priority)</li>
+                <li>Cloud sync, so the list survives a cleared browser and works on multiple devices</li>
+                <li>Import from .ics, .vcf, or CSV; export to CSV plus a lossless JSON backup with restore</li>
+                <li>No login step &mdash; the password is baked in at build time from a repo secret</li>
+                <li>Idempotent sends: one marker per person, per year, per offset, so a retry never double-sends</li>
+              </ul>
+              <p><strong style="color: var(--text);">What it costs</strong></p>
+              <p>Every service is pay-per-request or inside a permanent free tier, and a household-sized list doesn't come close to exhausting either. Lambda, DynamoDB, API Gateway, EventBridge, SES and CloudWatch all land at zero; SES bills $0.10 per 1,000 emails, so ~30 reminders a month rounds to nothing. Realistic bill: <strong>$0.00&ndash;$0.50/month</strong>. Cost Explorer reports <strong>$0.00</strong> for these services against the live stack over the last 30 days.</p>
+              <p>The only genuine costs are optional: a Route 53 hosted zone ($0.50/mo) and a domain (~$12/yr), needed only if you want reminders sent from your own domain &mdash; which is worth doing, since mail sent <em>as</em> a gmail.com address through SES fails Gmail's own DMARC policy and lands in spam.</p>
             </div>
           </details>
         </div>

@@ -367,6 +367,28 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 .btn-solid:hover { color: var(--ground); opacity: .9; border-color: var(--accent); }
 
+/* the primary ask — a slow sweep across the fill, not a gradient blob */
+.btn-ask { position: relative; overflow: hidden; }
+.btn-ask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, .22) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  animation: sweep 5.5s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+@keyframes sweep {
+  0%       { transform: translateX(-120%); }
+  22%, 100% { transform: translateX(120%); }
+}
+@media (prefers-reduced-motion: reduce) { .btn-ask::after { display: none; } }
+
 .meta-line {
   display: flex; flex-wrap: wrap; gap: 7px 22px;
   margin-top: 30px;
@@ -376,6 +398,189 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 .meta-line a { color: var(--ink-2); }
 .meta-line a:hover { color: var(--accent); }
+
+/* ============================================================
+   TRIAGE — "How can I solve your problem?"
+   Each intent reveals a real answer first; contact is optional.
+   ============================================================ */
+.triage {
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.triage-head {
+  padding: clamp(20px, 3vw, 28px) clamp(20px, 3vw, 30px);
+  border-bottom: 1px solid var(--rule-soft);
+}
+.triage-head h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.55rem, 3.4vw, 2.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.triage-head p {
+  color: var(--ink-2);
+  font-size: 15px;
+  margin-top: 9px;
+  max-width: 58ch;
+}
+
+.triage-opts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+  gap: 1px;
+  background: var(--rule-soft);
+  border-bottom: 1px solid var(--rule-soft);
+}
+/* keep every cell the same height so the grid reads as a set */
+.triage-opts .opt { justify-content: flex-start; }
+.opt {
+  appearance: none;
+  border: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  padding: 17px 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: background .16s ease, color .16s ease;
+}
+.opt:hover { background: var(--surface-2); }
+.opt[aria-pressed="true"] {
+  background: var(--accent-soft);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.opt-t {
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+.opt[aria-pressed="true"] .opt-t { color: var(--accent); }
+.opt-d {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .05em;
+  color: var(--ink-3);
+  line-height: 1.45;
+}
+
+/* the answer that appears on selection */
+.triage-answer {
+  padding: clamp(20px, 3vw, 28px) clamp(20px, 3vw, 30px);
+}
+.triage-answer[hidden] { display: none; }
+.answer-in { animation: fadeUp .22s cubic-bezier(.2,.7,.3,1); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.answer-k {
+  font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 11px;
+}
+.answer-h {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.45;
+  max-width: var(--measure);
+}
+.answer-b {
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.66;
+  margin-top: 9px;
+  max-width: var(--measure);
+}
+.answer-b strong { color: var(--ink); font-weight: 600; }
+.answer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+/* the optional contact step */
+.reply {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule-soft);
+}
+.reply-lead {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin-bottom: 13px;
+  max-width: var(--measure);
+}
+.reply-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+}
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.field input, .field textarea {
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--ground);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color .16s ease;
+}
+.field textarea { resize: vertical; min-height: 84px; line-height: 1.55; }
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-3); }
+.field input:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.field-wide { grid-column: 1 / -1; }
+
+.reply-foot {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-top: 14px;
+}
+.reply-note {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  max-width: 46ch;
+}
+/* honeypot — off-screen, never shown to a real visitor */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+}
+
+.status {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 14px;
+  padding: 13px 16px;
+  border-radius: 3px;
+  border-left: 2px solid var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--ink-2);
+}
+.status[hidden] { display: none; }
+.status.ok {
+  border-left-color: var(--live-line);
+  background: var(--live-soft);
+  color: var(--ink);
+}
+.status.ok strong { color: var(--live); }
+.status a { text-decoration: underline; }
 
 /* ============================================================
    FIGURE BAND — typographic, not cards
@@ -801,6 +1006,7 @@ body.locked { overflow: hidden; }
   <header class="masthead">
     <div class="wordmark"><a href="https://the-duke.org/">Matt Duke</a></div>
     <nav class="mast-nav" aria-label="Sections">
+      <a href="#help">Start here</a>
       <a href="#work">Work</a>
       <a href="#activity">Activity</a>
       <a href="#stack">Stack</a>
@@ -818,7 +1024,7 @@ body.locked { overflow: hidden; }
     <section class="hero">
       <div class="hero-grid">
         <div>
-          <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Open to Forward Deployed roles</p>
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Open to Forward Deployed &amp; product roles &middot; and to solving your problem</p>
           <h1>I build the small things<br />nobody <em>got around to</em>.</h1>
           <p class="standfirst">
             Forward Deployed Engineer in Dallas. Ten years shipping AI, cloud &amp; cybersecurity
@@ -828,7 +1034,11 @@ body.locked { overflow: hidden; }
             in one command.
           </p>
           <div class="hero-actions">
-            <button type="button" class="btn btn-solid" id="cvOpen" aria-haspopup="dialog" aria-controls="cvSheet">
+            <a class="btn btn-solid btn-ask" href="#help">
+              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM6.03 5.53a.75.75 0 0 1-1.06-1.06 4.25 4.25 0 0 1 6.06 5.94c-.3.31-.63.56-.93.78-.28.2-.5.37-.66.55-.15.16-.19.28-.19.38v.63a.75.75 0 0 1-1.5 0v-.63c0-.6.27-1.07.58-1.4.29-.31.65-.58.93-.78.3-.22.5-.38.66-.55a2.75 2.75 0 0 0-3.89-3.86ZM9 13.75a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>
+              How can I solve your problem?
+            </a>
+            <button type="button" class="btn" id="cvOpen" aria-haspopup="dialog" aria-controls="cvSheet">
               <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 8 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
               Read the resume
             </button>
@@ -849,6 +1059,87 @@ body.locked { overflow: hidden; }
     </section>
 
     <div class="spine">
+
+      <!-- ===================== TRIAGE ===================== -->
+      <section class="row" id="help">
+        <p class="rail">Start here</p>
+        <div>
+          <div class="triage">
+            <div class="triage-head">
+              <h2>How can I solve your problem?</h2>
+              <p>
+                Pick whichever is closest. You get a straight answer immediately &mdash;
+                no form to fill in first, and no email required to read it.
+              </p>
+            </div>
+
+            <div class="triage-opts" role="group" aria-label="What brought you here">
+              <button type="button" class="opt" data-key="recruiter" aria-pressed="false" aria-controls="answer">
+                <span class="opt-t">I'm verifying Matt's background</span>
+                <span class="opt-d">Recruiter or hiring manager</span>
+              </button>
+              <button type="button" class="opt" data-key="build" aria-pressed="false" aria-controls="answer">
+                <span class="opt-t">I need an app or a website built</span>
+                <span class="opt-d">Scoping something new</span>
+              </button>
+              <button type="button" class="opt" data-key="subs" aria-pressed="false" aria-controls="answer">
+                <span class="opt-t">My subscriptions cost too much</span>
+                <span class="opt-d">Refunds &amp; cancellations</span>
+              </button>
+              <button type="button" class="opt" data-key="data" aria-pressed="false" aria-controls="answer">
+                <span class="opt-t">I have a data problem</span>
+                <span class="opt-d">Pipelines, reporting, AI</span>
+              </button>
+              <button type="button" class="opt" data-key="ai" aria-pressed="false" aria-controls="answer">
+                <span class="opt-t">I want to start using AI</span>
+                <span class="opt-d">Tooling &amp; where to begin</span>
+              </button>
+              <button type="button" class="opt" data-key="other" aria-pressed="false" aria-controls="answer">
+                <span class="opt-t">Something else</span>
+                <span class="opt-d">Tell me in your own words</span>
+              </button>
+            </div>
+
+            <div class="triage-answer" id="answer" role="region" aria-live="polite" hidden>
+              <div id="answerSlot"></div>
+
+              <form class="reply" id="replyForm" novalidate>
+                <p class="reply-lead" id="replyLead">Want a reply from me directly?</p>
+                <div class="reply-row">
+                  <div class="field">
+                    <label for="fName">Your name</label>
+                    <input type="text" id="fName" name="name" autocomplete="name" placeholder="Optional" />
+                  </div>
+                  <div class="field">
+                    <label for="fEmail">Email</label>
+                    <input type="email" id="fEmail" name="email" autocomplete="email" placeholder="you@company.com" required />
+                  </div>
+                  <div class="field field-wide">
+                    <label for="fMsg">Anything I should know</label>
+                    <textarea id="fMsg" name="message" placeholder="A sentence or two is plenty."></textarea>
+                  </div>
+                </div>
+
+                <!-- bots fill this in; people never see it -->
+                <div class="hp" aria-hidden="true">
+                  <label for="fCompanyUrl">Leave this empty</label>
+                  <input type="text" id="fCompanyUrl" name="_gotcha" tabindex="-1" autocomplete="off" />
+                </div>
+
+                <input type="hidden" name="intent" id="fIntent" value="" />
+                <input type="hidden" name="_subject" id="fSubject" value="the-duke.org enquiry" />
+
+                <div class="reply-foot">
+                  <button type="submit" class="btn btn-solid" id="replySend">Send it to Matt</button>
+                  <span class="reply-note">Goes straight to my inbox &mdash; no list, no newsletter, no follow-up sequence. Skip it entirely if you just wanted the links above.</span>
+                </div>
+
+                <p class="status" id="replyStatus" hidden></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- ===================== ACTIVITY ===================== -->
       <section class="row" id="activity">
@@ -1116,6 +1407,7 @@ body.locked { overflow: hidden; }
           </p>
           <div class="hero-actions">
             <a class="btn btn-solid" href="mailto:matthewduke0@gmail.com">matthewduke0@gmail.com</a>
+            <a class="btn" href="#help">Tell me your problem instead</a>
             <button type="button" class="btn" id="cvOpen2" aria-haspopup="dialog" aria-controls="cvSheet">Read the resume</button>
             <a class="btn" href="https://www.linkedin.com/in/the-duke/" target="_blank" rel="noopener">LinkedIn</a>
           </div>
@@ -1303,6 +1595,240 @@ body.locked { overflow: hidden; }
     var next = current === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     try { localStorage.setItem(KEY, next); } catch (e) {}
+  });
+
+  /* ------------------------------------------------------------
+     Triage. Each intent answers the question on the spot, then
+     offers a reply. Nothing here requires an email to be useful.
+     ------------------------------------------------------------ */
+
+  /* ------------------------------------------------------------------
+     TO ENABLE DIRECT SENDING (about two minutes):
+       1. Sign up at https://formspree.io  (free tier: 50 messages/month)
+       2. Create a form; it gives you an endpoint that looks like
+          https://formspree.io/f/xldwxyzk
+       3. Paste it between the quotes below and commit.
+     Leave it empty and the form still works — it falls back to opening
+     the visitor's mail client with everything prefilled.
+     ------------------------------------------------------------------ */
+  var FORM_ENDPOINT = "";
+
+  var ANSWERS = {
+    recruiter: {
+      kicker: "Verifying my background",
+      head: "Everything I claim is running in public, so you can check it rather than take my word for it.",
+      body: "The figures on this page came from the GitHub API on 19 Aug 2026, not from memory. " +
+            "<strong>Sula</strong> is installable from the Chrome Web Store right now &mdash; TypeScript, " +
+            "Manifest V3, 343 automated tests, AWS serverless backend. The <strong>birthday reminder</strong> " +
+            "deploys into your own AWS account from a single CloudFormation template, so you can read the " +
+            "infrastructure I write rather than a description of it. Resume is on this page, and the code is open.",
+      links: [
+        { t: "Read the resume", href: "#resume", em: true },
+        { t: "Install Sula", href: "https://chromewebstore.google.com/detail/find-me-people/ngfklhkcicocfchdmepiajdmboialikf" },
+        { t: "Read the CloudFormation", href: "https://github.com/MatthewDuke1/birthday-reminder-gifting-app/blob/main/deploy/template.yaml" },
+        { t: "GitHub profile", href: "https://github.com/MatthewDuke1" }
+      ],
+      lead: "Want the conversation rather than the artifacts? Tell me the role and I'll come back to you."
+    },
+    build: {
+      kicker: "Building something",
+      head: "Before you commission anything, the honest first question is whether it needs to be built at all.",
+      body: "Most things people ask me to build already exist as a $9/mo product, and the useful version of " +
+            "this conversation is me telling you that for free. When it genuinely does need building, I work " +
+            "the way I did on the apps here: something small and complete that you can actually run, rather " +
+            "than a six-month project that dies in staging. <strong>Everything I ship is deployable to your " +
+            "own cloud account</strong> &mdash; you own it, and there's no dependency on me afterwards.",
+      links: [
+        { t: "See how the birthday app is packaged", href: "https://github.com/MatthewDuke1/birthday-reminder-gifting-app/tree/main/deploy", em: true },
+        { t: "Sula, built solo end-to-end", href: "https://trysula.com/" }
+      ],
+      lead: "Describe what you're trying to do &mdash; I'll tell you straight whether it's worth building."
+    },
+    subs: {
+      kicker: "Subscriptions & refunds",
+      head: "You can almost certainly get some of that money back, and I've already written the tools for it.",
+      body: "Two things are usually true: you're paying for at least one subscription you forgot about, and " +
+            "at least one charge is still inside its refund window. <strong>Sula</strong> finds the real " +
+            "customer service contact behind the chatbot, shows how many days you have left, and drafts the " +
+            "letter. The refund letter templates are free and need no install &mdash; " +
+            "<strong>you don't have to give me anything to use them</strong>.",
+      links: [
+        { t: "Free refund letter templates", href: "https://trysula.com/refund-letter-templates.html", em: true },
+        { t: "How to get a refund", href: "https://trysula.com/how-to-get-a-refund.html" },
+        { t: "How to cancel a subscription", href: "https://trysula.com/how-to-cancel-a-subscription.html" },
+        { t: "How to dispute a charge", href: "https://trysula.com/how-to-dispute-a-charge.html" },
+        { t: "Install Sula", href: "https://chromewebstore.google.com/detail/find-me-people/ngfklhkcicocfchdmepiajdmboialikf" }
+      ],
+      lead: "Stuck on a specific company? Tell me which one and what happened."
+    },
+    data: {
+      kicker: "Data problems",
+      head: "Usually the problem isn't the pipeline. It's that nobody agrees what the number means.",
+      body: "I spent ten years on this at Deloitte &mdash; ETL over business-critical data on S3 and Athena, " +
+            "compliance reporting inside customer environments, and a datalake and AI detection platform that " +
+            "did over $50M in sales. The pattern is nearly always the same: the engineering is tractable, and " +
+            "the expensive part is the definitions and the access. <strong>Happy to tell you which of the two " +
+            "you have</strong> before anyone quotes you for the other.",
+      links: [
+        { t: "Read the relevant experience", href: "#resume", em: true }
+      ],
+      lead: "Describe the data and what decision it's meant to support."
+    },
+    ai: {
+      kicker: "Getting started with AI",
+      head: "The hard part isn't the models. It's that there are four hundred tools and they all promise the same thing.",
+      body: "I built a free guide for exactly this: pick the goal you actually have, get a short list back " +
+            "with the free credits, the real differences, and the catches surfaced up front. " +
+            "<strong>100+ tools, 12 categories, no signup and no email capture.</strong> It turns a fortnight " +
+            "of demos into about ten minutes.",
+      links: [
+        { t: "Open the AI Starter Guide", href: "https://matthewduke1.github.io/ai-starter-guide/", em: true }
+      ],
+      lead: "Want a recommendation for your specific situation? Describe it and I'll point you somewhere."
+    },
+    other: {
+      kicker: "Something else",
+      head: "Then just tell me what it is.",
+      body: "If it's something I can answer in a message, I will &mdash; and if it isn't something I can help " +
+            "with, I'll say so and point you at whoever can. <strong>No pitch either way.</strong>",
+      links: [],
+      lead: "What's on your mind?"
+    }
+  };
+
+  var slot     = document.getElementById("answerSlot");
+  var panel    = document.getElementById("answer");
+  var form     = document.getElementById("replyForm");
+  var lead     = document.getElementById("replyLead");
+  var intent   = document.getElementById("fIntent");
+  var subject  = document.getElementById("fSubject");
+  var statusEl = document.getElementById("replyStatus");
+  var opts     = Array.prototype.slice.call(document.querySelectorAll(".opt"));
+  var sendBtn  = document.getElementById("replySend");
+
+  /* say what the button will actually do */
+  if (!FORM_ENDPOINT) {
+    sendBtn.textContent = "Compose this email";
+    document.querySelector(".reply-note").innerHTML =
+      "Opens your mail client with the details filled in &mdash; nothing is sent until you press send. " +
+      "Skip it entirely if you just wanted the links above.";
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function renderAnswer(key) {
+    var a = ANSWERS[key];
+    if (!a) return;
+
+    var html = '<div class="answer-in">' +
+      '<p class="answer-k">' + esc(a.kicker) + "</p>" +
+      '<p class="answer-h">' + a.head + "</p>" +
+      '<p class="answer-b">' + a.body + "</p>";
+
+    if (a.links.length) {
+      html += '<div class="answer-links">';
+      a.links.forEach(function (l) {
+        var ext = l.href.charAt(0) !== "#";
+        html += '<a class="link-chip' + (l.em ? " link-chip-em" : "") + '" href="' + esc(l.href) + '"' +
+                (ext ? ' target="_blank" rel="noopener"' : "") + ">" + esc(l.t) + "</a>";
+      });
+      html += "</div>";
+    }
+    html += "</div>";
+
+    slot.innerHTML = html;
+    lead.textContent = a.lead;
+    intent.value = key;
+    subject.value = "the-duke.org — " + a.kicker;
+    panel.hidden = false;
+
+    /* the resume links inside an answer open the dialog */
+    slot.querySelectorAll('a[href="#resume"]').forEach(function (el) {
+      el.addEventListener("click", function (e) { e.preventDefault(); openSheet(); });
+    });
+
+    statusEl.hidden = true;
+    statusEl.className = "status";
+  }
+
+  opts.forEach(function (b) {
+    b.addEventListener("click", function () {
+      opts.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+      renderAnswer(b.getAttribute("data-key"));
+    });
+  });
+
+  /* ---- submit ---- */
+  function mailtoFallback(data) {
+    var body =
+      "Intent: " + data.intent + "\n" +
+      "Name: " + (data.name || "—") + "\n\n" +
+      (data.message || "");
+    return "mailto:matthewduke0@gmail.com" +
+      "?subject=" + encodeURIComponent(data._subject) +
+      "&body=" + encodeURIComponent(body);
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var data = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      message: form.message.value.trim(),
+      intent: intent.value,
+      _subject: subject.value
+    };
+
+    /* honeypot: a real visitor never sees this field */
+    if (form._gotcha.value) { return; }
+
+    if (!data.email || data.email.indexOf("@") < 1) {
+      statusEl.className = "status";
+      statusEl.innerHTML = "I need an email address to reply to &mdash; otherwise the message arrives and goes nowhere.";
+      statusEl.hidden = false;
+      form.email.focus();
+      return;
+    }
+
+    if (!FORM_ENDPOINT) {
+      window.location.href = mailtoFallback(data);
+      statusEl.className = "status";
+      statusEl.innerHTML = "Opening your email client with this filled in. If nothing happens, write to " +
+        '<a href="mailto:matthewduke0@gmail.com">matthewduke0@gmail.com</a> directly.';
+      statusEl.hidden = false;
+      return;
+    }
+
+    var btn = sendBtn;
+    var btnLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      form.reset();
+      statusEl.className = "status ok";
+      statusEl.innerHTML = "<strong>Sent.</strong> It's in my inbox &mdash; I'll come back to you at " +
+        esc(data.email) + ".";
+      statusEl.hidden = false;
+      btn.textContent = "Sent";
+    }).catch(function () {
+      statusEl.className = "status";
+      statusEl.innerHTML = "That didn't go through. Write to " +
+        '<a href="' + esc(mailtoFallback(data)) + '">matthewduke0@gmail.com</a> instead and it reaches me the same way.';
+      statusEl.hidden = false;
+      btn.disabled = false;
+      btn.textContent = btnLabel;
+    });
   });
 
   /* ---- resume dialog ---- */

@@ -1,884 +1,1348 @@
 <!DOCTYPE html>
-<html lang="en" data-color-mode="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matt Duke — GitHub Activity</title>
-  <meta name="description" content="Matt Duke's development activity, open apps, and GitHub contributions." />
-  <link rel="icon" href="https://github.githubassets.com/favicons/favicon-dark.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    /* GitHub dark theme palette */
-    :root {
-      --bg:          #0d1117;
-      --bg-surface:  #161b22;
-      --bg-elev:     #1c2128;
-      --bg-hover:    #21262d;
-      --border:      #30363d;
-      --border-muted:#21262d;
-      --text:        #e6edf3;
-      --text-muted:  #7d8590;
-      --text-subtle: #484f58;
-      --accent:      #2f81f7;  /* GitHub blue */
-      --accent-hover:#58a6ff;
-      --success:     #3fb950;
-      --warn:        #d29922;
-      --danger:      #f85149;
-      --purple:      #a371f7;
-      --pink:        #db61a2;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Noto Sans', Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { color: var(--accent-hover); text-decoration: underline; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Matt Duke — Shipping Log</title>
+<meta name="description" content="Matt Duke — Forward Deployed Engineer in Dallas, TX. Three shipped products, 270 merged pull requests this year, and the AWS templates to run any of it yourself." />
+<link rel="canonical" href="https://the-duke.org/" />
 
-    .container { max-width: 1012px; margin: 0 auto; padding: 0 16px; }
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="Matt Duke — Shipping Log" />
+<meta property="og:description" content="Forward Deployed Engineer. Three shipped products, 270 merged pull requests this year, deployable to your own AWS account." />
+<meta property="og:url" content="https://the-duke.org/" />
+<meta property="og:image" content="https://the-duke.org/headshot.png" />
+<meta name="twitter:card" content="summary" />
 
-    /* Top bar (GitHub-style) */
-    .topbar {
-      background: #010409;
-      border-bottom: 1px solid var(--border);
-      padding: 16px 0;
-    }
-    .topbar-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .topbar-brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; color: var(--text); }
-    .topbar-brand svg { fill: var(--text); }
-    .topbar-links { display: flex; gap: 20px; font-size: 14px; }
-    .topbar-links a { color: var(--text); }
-    .topbar-links a:hover { color: var(--accent); text-decoration: none; }
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0E14'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23E8A33D' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
 
-    /* Profile header */
-    .profile { padding: 32px 0 16px; }
-    .profile-inner { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
-    .avatar {
-      width: 160px; height: 160px; border-radius: 50%;
-      border: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .profile-info { flex: 1; min-width: 260px; padding-top: 8px; }
-    .profile-info h1 { font-size: 26px; font-weight: 600; line-height: 1.25; }
-    .profile-info .handle { font-size: 20px; font-weight: 300; color: var(--text-muted); margin-top: 2px; }
-    .profile-info .bio { font-size: 16px; margin-top: 16px; color: var(--text); max-width: 560px; }
-    .profile-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(63, 185, 80, 0.15);
-      color: var(--success);
-      border: 1px solid rgba(63, 185, 80, 0.4);
-      padding: 3px 10px;
-      border-radius: 2em;
-      font-size: 12px;
-      font-weight: 500;
-      margin-left: 8px;
-      vertical-align: middle;
-    }
-    .profile-badge::before {
-      content: '';
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--success);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-    .profile-meta { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--text-muted); }
-    .profile-meta span { display: inline-flex; align-items: center; gap: 6px; }
-    .profile-meta svg { fill: var(--text-muted); }
-    .profile-meta a { color: var(--text-muted); }
-    .profile-meta a:hover { color: var(--accent); }
-    .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: #21262d; color: var(--text);
-      border: 1px solid #363b42;
-      padding: 5px 16px; border-radius: 6px;
-      font-size: 14px; font-weight: 500;
-      cursor: pointer; text-decoration: none;
-      transition: all 0.15s;
-      font-family: inherit;
-    }
-    .btn:hover { background: #30363d; border-color: #8b949e; text-decoration: none; color: var(--text); }
-    .btn-primary { background: #238636; border-color: rgba(240,246,252,0.1); }
-    .btn-primary:hover { background: #2ea043; }
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" />
 
-    /* Stats grid */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
-    }
-    .stat {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px;
-      transition: border-color 0.15s;
-    }
-    .stat:hover { border-color: var(--accent); }
-    .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-number { font-size: 28px; font-weight: 700; color: var(--text); margin-top: 4px; }
-    .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Matt Duke",
+  "url": "https://the-duke.org/",
+  "image": "https://the-duke.org/headshot.png",
+  "jobTitle": "Forward Deployed Engineer",
+  "address": { "@type": "PostalAddress", "addressLocality": "Dallas", "addressRegion": "TX", "addressCountry": "US" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Southern California" },
+  "worksFor": { "@type": "Organization", "name": "Deloitte" },
+  "sameAs": [
+    "https://github.com/MatthewDuke1",
+    "https://www.linkedin.com/in/the-duke/",
+    "https://trysula.com/"
+  ]
+}
+</script>
 
-    /* Notice */
-    .notice {
-      background: rgba(47, 129, 247, 0.08);
-      border: 1px solid rgba(47, 129, 247, 0.3);
-      border-left: 3px solid var(--accent);
-      border-radius: 6px;
-      padding: 14px 18px;
-      font-size: 14px;
-      color: var(--text);
-      margin: 20px 0 28px;
-    }
-    .notice strong { color: var(--accent-hover); }
+<style>
+/* ============================================================
+   TOKENS — light is the base; dark redefines tokens only.
+   Never declare a color anywhere but here.
+   ============================================================ */
+:root {
+  --ground:      #F7F5F1;
+  --surface:     #FFFFFF;
+  --surface-2:   #F0EDE7;
+  --rule:        #D9D4CA;
+  --rule-soft:   #E7E3DA;
 
-    /* Section heading */
-    .section { padding: 28px 0 8px; }
-    .section-header {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 16px; font-weight: 600;
-      color: var(--text);
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 16px;
-    }
-    .section-header svg { fill: var(--text-muted); }
-    .section-header .count {
-      background: var(--bg-hover);
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 2em;
-      margin-left: auto;
-    }
+  --ink:         #16191F;
+  --ink-2:       #4A4F58;
+  --ink-3:       #7C8189;
 
-    /* Pinned repo cards */
-    .pinned-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-    }
-    .repo-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px;
-      display: flex; flex-direction: column;
-      transition: border-color 0.15s;
-      position: relative;
-    }
-    .repo-card:hover { border-color: var(--accent); }
-    .repo-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .repo-header svg { fill: var(--text-muted); flex-shrink: 0; }
-    .repo-name {
-      color: var(--accent);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .repo-name:hover { text-decoration: underline; }
-    .repo-visibility {
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 500;
-      padding: 0 7px;
-      border-radius: 2em;
-      margin-left: auto;
-    }
-    .repo-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 12px;
-      flex: 1;
-    }
-    .repo-meta {
-      display: flex;
-      gap: 16px;
-      font-size: 12px;
-      color: var(--text-muted);
-      align-items: center;
-    }
-    .repo-lang { display: flex; align-items: center; gap: 4px; }
-    .lang-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-    .dot-js { background: #f1e05a; }
-    .dot-html { background: #e34c26; }
-    .dot-py { background: #3572A5; }
-    .dot-ts { background: #3178c6; }
-    .repo-stats { display: flex; gap: 12px; margin-left: auto; }
-    .repo-stats svg { fill: var(--text-muted); vertical-align: middle; margin-right: 2px; }
+  --accent:      #B0741A;
+  --accent-soft: rgba(176, 116, 26, 0.10);
+  --accent-line: rgba(176, 116, 26, 0.30);
 
-    /* Product vision dropdown */
-    .vision {
-      margin-top: 12px;
-      background: var(--bg-elev);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .vision summary {
-      cursor: pointer;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--accent-hover);
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.15s;
-      user-select: none;
-    }
-    .vision summary::-webkit-details-marker { display: none; }
-    .vision summary:hover { background: var(--bg-hover); }
-    .vision summary::before {
-      content: '\25B6';
-      font-size: 9px;
-      transition: transform 0.2s;
-      display: inline-block;
-      color: var(--text-muted);
-    }
-    .vision[open] summary::before { transform: rotate(90deg); }
-    .vision-body {
-      padding: 10px 14px 14px;
-      font-size: 13px;
-      color: var(--text);
-      line-height: 1.6;
-      border-top: 1px solid var(--border-muted);
-    }
-    .vision-body p + p { margin-top: 8px; }
-    .vision-body strong { color: var(--accent-hover); }
-    .vision-tag {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--purple);
-      background: rgba(163, 113, 247, 0.12);
-      border: 1px solid rgba(163, 113, 247, 0.35);
-      padding: 1px 7px;
-      border-radius: 2em;
-      margin-left: auto;
-    }
+  --live:        #2F7D52;
+  --live-soft:   rgba(47, 125, 82, 0.10);
+  --live-line:   rgba(47, 125, 82, 0.32);
 
-    /* Product links row on repo cards */
-    .repo-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .repo-links a {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--bg-elev);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.15s;
-    }
-    .repo-links a:hover { border-color: var(--accent); color: var(--accent-hover); text-decoration: none; }
-    .repo-links svg { fill: currentColor; }
+  --shadow:      0 1px 2px rgba(22,25,31,.05), 0 8px 24px -12px rgba(22,25,31,.14);
+  --shadow-lift: 0 2px 4px rgba(22,25,31,.06), 0 18px 40px -16px rgba(22,25,31,.22);
 
-    /* Published / Chrome Store highlight button */
-    .chrome-btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: linear-gradient(135deg, #4285F4 0%, #34A853 50%, #FBBC04 80%, #EA4335 100%);
-      color: #fff !important;
-      border: none !important;
-      padding: 6px 14px !important;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 2px 8px rgba(66,133,244,0.35);
-      animation: chromePulse 2.4s infinite;
-      position: relative;
-    }
-    .chrome-btn:hover { transform: translateY(-1px); color: #fff !important; text-decoration: none; }
-    @keyframes chromePulse {
-      0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 2px 8px rgba(66,133,244,0.35); }
-      50%      { box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 4px 18px rgba(66,133,244,0.65); }
-    }
-    .live-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: rgba(63, 185, 80, 0.15);
-      color: var(--success);
-      border: 1px solid rgba(63, 185, 80, 0.4);
-      padding: 2px 8px;
-      border-radius: 2em;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-left: 6px;
-    }
-    .live-badge::before {
-      content: '';
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--success);
-      animation: pulse 2s infinite;
-    }
+  --display: "Instrument Serif", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --body:    "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-    /* Tech tags */
-    .tech-section { padding: 28px 0 40px; }
-    .tech-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tech-tag {
-      background: rgba(47, 129, 247, 0.1);
-      border: 1px solid rgba(47, 129, 247, 0.3);
-      color: var(--accent-hover);
-      padding: 4px 12px;
-      border-radius: 2em;
-      font-size: 12px;
-      font-weight: 500;
-    }
+  --measure: 64ch;
+  --gutter:  clamp(20px, 5vw, 48px);
+  /* must stay wider than the longest rail label ("ACTIVITY") plus its tick */
+  --rail:    clamp(104px, 11vw, 150px);
+}
 
-    /* Footer */
-    .footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 0;
-      text-align: center;
-      color: var(--text-subtle);
-      font-size: 12px;
-      margin-top: 40px;
-    }
-    .footer a { color: var(--text-muted); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:      #0B0E14;
+    --surface:     #131822;
+    --surface-2:   #1A2029;
+    --rule:        #2A313D;
+    --rule-soft:   #1E242E;
 
-    @media (max-width: 640px) {
-      .profile-inner { flex-direction: column; align-items: center; text-align: center; }
-      .profile-meta { justify-content: center; }
-      .topbar-links { display: none; }
-    }
+    --ink:         #ECEAE4;
+    --ink-2:       #A8AEB8;
+    --ink-3:       #737A85;
 
-    /* Resume modal */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(1, 4, 9, 0.75);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      z-index: 1000;
-      display: none;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 40px 16px;
-      overflow-y: auto;
-    }
-    .modal-overlay.is-open { display: flex; }
-    body.modal-lock { overflow: hidden; }
-    .modal {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      width: 100%;
-      max-width: 860px;
-      position: relative;
-      box-shadow: 0 16px 70px rgba(0,0,0,0.6);
-      animation: modalIn 0.18s ease-out;
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      position: sticky; top: 0;
-      background: var(--bg);
-      border-radius: 12px 12px 0 0;
-      z-index: 1;
-    }
-    .modal-title { font-size: 16px; font-weight: 600; color: var(--text); }
-    .modal-close {
-      background: transparent; border: none; cursor: pointer;
-      color: var(--text-muted); padding: 6px; border-radius: 6px;
-      display: inline-flex; align-items: center; justify-content: center;
-      transition: all 0.15s;
-    }
-    .modal-close:hover { background: var(--bg-hover); color: var(--text); }
-    .modal-close svg { fill: currentColor; }
-    .modal-body { padding: 24px 28px 32px; color: var(--text); font-size: 14px; line-height: 1.6; }
-    .resume-head { text-align: center; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
-    .resume-head h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; }
-    .resume-contact { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
-    .resume-contact a { color: var(--text-muted); }
-    .resume-contact a:hover { color: var(--accent); }
-    .resume-section { margin-top: 22px; }
-    .resume-section h3 {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
-      color: var(--accent-hover); font-weight: 700;
-      padding-bottom: 6px; border-bottom: 1px solid var(--border);
-      margin-bottom: 14px;
-    }
-    .resume-job { margin-bottom: 18px; }
-    .resume-job-head {
-      display: flex; justify-content: space-between;
-      gap: 12px; flex-wrap: wrap; align-items: baseline;
-      margin-bottom: 6px;
-    }
-    .resume-job-title { font-weight: 600; color: var(--text); font-size: 14px; }
-    .resume-job-company { color: var(--text-muted); font-style: italic; }
-    .resume-job-dates { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
-    .resume-job ul { margin: 6px 0 0 18px; color: var(--text); }
-    .resume-job li { margin-bottom: 4px; }
-    .resume-profile { color: var(--text); }
-    .resume-skills-block { margin-bottom: 10px; font-size: 13px; }
-    .resume-skills-block strong { color: var(--text); }
-    .resume-skills-block span { color: var(--text-muted); }
-    @media (max-width: 640px) {
-      .modal-body { padding: 18px 18px 24px; }
-      .resume-head h2 { font-size: 22px; }
-      .resume-job-dates { white-space: normal; }
-    }
-  </style>
+    --accent:      #E8A33D;
+    --accent-soft: rgba(232, 163, 61, 0.11);
+    --accent-line: rgba(232, 163, 61, 0.32);
+
+    --live:        #4FB477;
+    --live-soft:   rgba(79, 180, 119, 0.12);
+    --live-line:   rgba(79, 180, 119, 0.34);
+
+    --shadow:      0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --shadow-lift: 0 2px 4px rgba(0,0,0,.45), 0 18px 40px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:      #0B0E14;
+  --surface:     #131822;
+  --surface-2:   #1A2029;
+  --rule:        #2A313D;
+  --rule-soft:   #1E242E;
+
+  --ink:         #ECEAE4;
+  --ink-2:       #A8AEB8;
+  --ink-3:       #737A85;
+
+  --accent:      #E8A33D;
+  --accent-soft: rgba(232, 163, 61, 0.11);
+  --accent-line: rgba(232, 163, 61, 0.32);
+
+  --live:        #4FB477;
+  --live-soft:   rgba(79, 180, 119, 0.12);
+  --live-line:   rgba(79, 180, 119, 0.34);
+
+  --shadow:      0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  --shadow-lift: 0 2px 4px rgba(0,0,0,.45), 0 18px 40px -16px rgba(0,0,0,.7);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4, p, ul, ol, figure, blockquote { margin: 0; }
+ul { padding: 0; list-style: none; }
+img { max-width: 100%; display: block; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+::selection { background: var(--accent-soft); color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+.skip {
+  position: absolute; left: -9999px;
+  background: var(--surface); color: var(--ink);
+  padding: 10px 16px; border: 1px solid var(--rule); border-radius: 4px;
+  z-index: 100; font-size: 14px;
+}
+.skip:focus { left: 16px; top: 16px; }
+
+/* ============================================================
+   SHELL — a ruled spine down the left, content hung off it
+   ============================================================ */
+.shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.spine { position: relative; }
+.spine::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--rail) - 22px);
+  top: clamp(40px, 6vw, 76px);
+  bottom: clamp(40px, 6vw, 76px);
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    var(--rule) 40px,
+    var(--rule) calc(100% - 40px),
+    transparent 100%
+  );
+}
+@media (max-width: 860px) { .spine::before { display: none; } }
+
+.row {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  gap: 0 clamp(20px, 4vw, 44px);
+  padding: clamp(40px, 6vw, 76px) 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.row:last-of-type { border-bottom: 0; }
+@media (max-width: 860px) {
+  /* collapse the rail entirely so nothing is pushed off-canvas */
+  :root { --rail: 0px; }
+  .row { grid-template-columns: 1fr; gap: 18px; padding: 44px 0; }
+}
+
+/* the rail label sits ON the spine, notched with a tick */
+.rail {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-top: .55em;
+  padding-right: 22px;
+  text-align: right;
+  position: relative;
+}
+.rail::after {
+  content: "";
+  position: absolute;
+  right: 0; top: 1.15em;
+  width: 14px; height: 1px;
+  background: var(--accent);
+}
+@media (max-width: 860px) {
+  .rail { padding-top: 0; }
+  .rail::after { display: none; }
+  .rail::before {
+    content: ""; display: inline-block;
+    width: 13px; height: 1px; background: var(--accent);
+    vertical-align: middle; margin-right: 9px;
+  }
+}
+
+/* ============================================================
+   MASTHEAD
+   ============================================================ */
+.masthead {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.wordmark {
+  font-family: var(--display);
+  font-size: 21px;
+  letter-spacing: .01em;
+  color: var(--ink);
+}
+.wordmark a { color: inherit; }
+.wordmark a:hover { text-decoration: none; color: var(--accent); }
+.mast-nav {
+  display: flex; align-items: center;
+  flex-wrap: wrap;
+  gap: 12px clamp(14px, 3vw, 30px);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+/* on narrow screens the section anchors are redundant with scrolling —
+   keep the theme control, drop the rest rather than wrapping to two rows */
+@media (max-width: 560px) {
+  .mast-nav a { display: none; }
+  .masthead { padding: 16px 0; }
+}
+.mast-nav a { color: var(--ink-2); }
+.mast-nav a:hover { color: var(--accent); text-decoration: none; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { padding: clamp(52px, 9vw, 104px) 0 clamp(40px, 6vw, 64px); }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(28px, 5vw, 60px);
+  align-items: start;
+}
+@media (max-width: 780px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 22px;
+}
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--live);
+  box-shadow: 0 0 0 3px var(--live-soft);
+  animation: breathe 2.6s ease-in-out infinite;
+  flex: none;
+}
+@keyframes breathe { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.9rem, 7.2vw, 5.1rem);
+  line-height: .98;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero .standfirst {
+  font-size: clamp(1.06rem, 1.9vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 54ch;
+  margin-top: 26px;
+}
+.hero .standfirst strong { color: var(--ink); font-weight: 600; }
+
+.portrait {
+  width: clamp(122px, 17vw, 174px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  filter: grayscale(1) contrast(1.04);
+  transition: filter .5s ease;
+}
+.portrait:hover { filter: grayscale(0) contrast(1); }
+@media (max-width: 780px) { .portrait { width: 116px; } }
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 500;
+  letter-spacing: .07em; text-transform: uppercase;
+  padding: 11px 19px;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.btn:hover {
+  text-decoration: none;
+  color: var(--accent);
+  border-color: var(--accent-line);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.btn svg { fill: currentColor; flex: none; }
+.btn-solid {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ground);
+}
+.btn-solid:hover { color: var(--ground); opacity: .9; border-color: var(--accent); }
+
+.meta-line {
+  display: flex; flex-wrap: wrap; gap: 7px 22px;
+  margin-top: 30px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.meta-line a { color: var(--ink-2); }
+.meta-line a:hover { color: var(--accent); }
+
+/* ============================================================
+   FIGURE BAND — typographic, not cards
+   ============================================================ */
+.figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: clamp(24px, 4vw, 40px) clamp(20px, 3vw, 36px);
+}
+.figure { display: flex; flex-direction: column; gap: 3px; }
+.figure-n {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 5.4vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.figure-n .unit { font-size: .46em; color: var(--accent); vertical-align: super; margin-left: 2px; }
+.figure-k {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-2);
+  margin-top: 7px;
+}
+.figure-s { font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+
+.footnote {
+  margin-top: 34px;
+  padding: 16px 18px;
+  border-left: 2px solid var(--accent-line);
+  background: var(--accent-soft);
+  border-radius: 0 3px 3px 0;
+  font-size: 14px;
+  color: var(--ink-2);
+  max-width: var(--measure);
+}
+.footnote strong { color: var(--ink); font-weight: 600; }
+
+/* activity sparkline */
+.spark { margin-top: 38px; max-width: 560px; }
+.spark-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-3);
+  padding-bottom: 10px; border-bottom: 1px solid var(--rule-soft);
+}
+.spark-bars {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  align-items: end;
+  height: 92px;
+  margin-top: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.spark-bar {
+  background: var(--accent-soft);
+  border-top: 2px solid var(--accent);
+  border-radius: 1px 1px 0 0;
+  transition: background .18s ease;
+}
+/* months with no activity: an empty slot, not a hairline bar */
+.spark-bar[data-empty] {
+  background: none;
+  border-top: 0;
+  border-bottom: 2px solid var(--rule);
+  height: 2px;
+}
+.spark-bar:not([data-empty]):hover { background: var(--accent-line); }
+.spark-axis {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+  font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+  text-align: center; margin-top: 9px;
+}
+.spark-note { font-size: 13px; color: var(--ink-3); margin-top: 14px; line-height: 1.5; }
+
+/* ============================================================
+   WORK ENTRIES
+   ============================================================ */
+.entries { display: flex; flex-direction: column; gap: clamp(30px, 4.5vw, 48px); }
+.entry {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: clamp(22px, 3.4vw, 34px);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.entry:hover {
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-2px);
+}
+.entry-top {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-soft);
+  margin-bottom: 18px;
+}
+.entry-name {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2.05rem);
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+.entry-name a { color: inherit; }
+.entry-name a:hover { color: var(--accent); text-decoration: none; }
+
+.tag {
+  font-family: var(--mono);
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .11em; text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 2em;
+  border: 1px solid var(--rule);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.tag-live {
+  color: var(--live);
+  border-color: var(--live-line);
+  background: var(--live-soft);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.tag-live .dot { width: 5px; height: 5px; box-shadow: none; }
+.tag-push { margin-left: auto; }
+
+.entry-lede {
+  font-size: 15.5px;
+  line-height: 1.66;
+  color: var(--ink-2);
+  max-width: var(--measure);
+}
+.entry-lede strong { color: var(--ink); font-weight: 600; }
+
+.entry-facts {
+  display: flex; flex-wrap: wrap;
+  gap: 8px 26px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+.entry-facts b { color: var(--ink-2); font-weight: 500; }
+
+.entry-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.link-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono);
+  font-size: 11.5px; letter-spacing: .05em;
+  padding: 8px 13px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  transition: border-color .18s ease, color .18s ease;
+}
+.link-chip:hover { color: var(--accent); border-color: var(--accent-line); text-decoration: none; }
+.link-chip svg { fill: currentColor; flex: none; }
+.link-chip-em {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent);
+}
+
+/* disclosure */
+details.note {
+  margin-top: 18px;
+  border: 1px solid var(--rule-soft);
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+details.note + details.note { margin-top: 9px; }
+details.note summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 11px 15px;
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex; align-items: center; gap: 10px;
+  user-select: none;
+  transition: color .16s ease;
+}
+details.note summary::-webkit-details-marker { display: none; }
+details.note summary:hover { color: var(--accent); }
+details.note summary::before {
+  content: "+";
+  font-size: 14px; line-height: 1;
+  color: var(--accent);
+  transition: transform .2s ease;
+  display: inline-block;
+}
+details.note[open] summary::before { transform: rotate(45deg); }
+.note-tag { margin-left: auto; color: var(--ink-3); letter-spacing: .09em; }
+.note-body {
+  padding: 4px 16px 18px;
+  font-size: 14.5px;
+  line-height: 1.68;
+  color: var(--ink-2);
+  max-width: var(--measure);
+}
+.note-body p + p { margin-top: 11px; }
+.note-body strong { color: var(--ink); font-weight: 600; }
+.note-body ul { margin: 11px 0 0; display: flex; flex-direction: column; gap: 7px; }
+.note-body li { padding-left: 17px; position: relative; }
+.note-body li::before {
+  content: "—";
+  position: absolute; left: 0;
+  color: var(--accent);
+}
+.snippet {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.6;
+  background: var(--ground);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  overflow-x: auto;
+  color: var(--ink-2);
+  white-space: pre;
+}
+
+/* ============================================================
+   STACK
+   ============================================================ */
+.stack-groups { display: flex; flex-direction: column; gap: 22px; }
+.stack-group {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 8px 20px;
+  align-items: start;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.stack-group:last-child { border-bottom: 0; padding-bottom: 0; }
+@media (max-width: 640px) { .stack-group { grid-template-columns: 1fr; } }
+.stack-label {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--accent);
+  padding-top: 4px;
+}
+.stack-items { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  padding: 5px 11px;
+  border: 1px solid var(--rule);
+  border-radius: 2em;
+  color: var(--ink-2);
+  background: var(--surface);
+  transition: border-color .16s ease, color .16s ease;
+}
+.chip:hover { border-color: var(--accent-line); color: var(--ink); }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.closer { max-width: var(--measure); }
+.closer h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.closer p { color: var(--ink-2); margin-top: 15px; font-size: 15.5px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.foot {
+  border-top: 1px solid var(--rule);
+  padding: 26px 0 44px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+}
+.foot a { color: var(--ink-3); }
+.foot a:hover { color: var(--accent); }
+.foot-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+/* ============================================================
+   THEME TOGGLE
+   ============================================================ */
+.theme-btn {
+  background: none; border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--ink-2);
+  cursor: pointer;
+  padding: 5px 8px;
+  display: inline-flex; align-items: center;
+  transition: color .16s ease, border-color .16s ease;
+  font: inherit;
+}
+.theme-btn:hover { color: var(--accent); border-color: var(--accent-line); }
+.theme-btn svg { fill: currentColor; display: block; }
+.theme-btn .moon { display: none; }
+:root[data-theme="dark"] .theme-btn .moon { display: block; }
+:root[data-theme="dark"] .theme-btn .sun { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-btn .moon { display: block; }
+  :root:not([data-theme="light"]) .theme-btn .sun  { display: none; }
+}
+
+/* ============================================================
+   RESUME DIALOG
+   ============================================================ */
+.scrim {
+  position: fixed; inset: 0;
+  background: rgba(9, 11, 16, .72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 90;
+  display: none;
+  align-items: flex-start; justify-content: center;
+  padding: clamp(16px, 5vh, 56px) 16px;
+  overflow-y: auto;
+}
+.scrim.open { display: flex; }
+body.locked { overflow: hidden; }
+.sheet {
+  background: var(--ground);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  width: 100%; max-width: 820px;
+  box-shadow: 0 30px 90px rgba(0,0,0,.5);
+  animation: rise .2s cubic-bezier(.2,.7,.3,1);
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.sheet-head {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 15px 20px;
+  background: var(--ground);
+  border-bottom: 1px solid var(--rule);
+  border-radius: 5px 5px 0 0;
+}
+.sheet-title {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.x {
+  background: none; border: 1px solid var(--rule); border-radius: 3px;
+  color: var(--ink-2); cursor: pointer;
+  width: 30px; height: 30px;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color .16s ease, border-color .16s ease;
+}
+.x:hover { color: var(--accent); border-color: var(--accent-line); }
+.x svg { fill: currentColor; }
+.sheet-body { padding: clamp(24px, 4vw, 40px); }
+
+.cv-head { text-align: center; padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
+.cv-head h2 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(2rem, 4.5vw, 2.7rem); line-height: 1.04;
+  letter-spacing: -0.015em; color: var(--ink);
+}
+.cv-role {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--accent); margin-top: 10px;
+}
+.cv-contact {
+  font-family: var(--mono); font-size: 11.5px;
+  color: var(--ink-3); margin-top: 12px; line-height: 1.85;
+}
+.cv-contact a { color: var(--ink-2); }
+.cv-sec { margin-top: 30px; }
+.cv-sec > h3 {
+  font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--accent);
+  padding-bottom: 8px; border-bottom: 1px solid var(--rule-soft);
+  margin-bottom: 18px;
+}
+.cv-lede { color: var(--ink-2); font-size: 15px; line-height: 1.68; }
+.cv-job { margin-bottom: 22px; }
+.cv-job:last-child { margin-bottom: 0; }
+.cv-job-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 14px; flex-wrap: wrap; margin-bottom: 9px;
+}
+.cv-job-title { font-weight: 600; color: var(--ink); font-size: 15px; }
+.cv-job-org { color: var(--ink-2); }
+.cv-job-when {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-3); white-space: nowrap;
+}
+.cv-job ul { display: flex; flex-direction: column; gap: 7px; }
+.cv-job li {
+  position: relative; padding-left: 17px;
+  color: var(--ink-2); font-size: 14.5px; line-height: 1.6;
+}
+.cv-job li::before {
+  content: "—"; position: absolute; left: 0; color: var(--accent);
+}
+.cv-kv { font-size: 14px; color: var(--ink-2); line-height: 1.7; }
+.cv-kv + .cv-kv { margin-top: 12px; }
+.cv-kv b { color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) { .cv-job-when { white-space: normal; } }
+</style>
 </head>
 <body>
 
-  <!-- Top bar -->
-  <div class="topbar">
-    <div class="container topbar-inner">
-      <div class="topbar-brand">
-        <svg height="24" viewBox="0 0 16 16" width="24"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
-        <span>matthewduke1</span>
-      </div>
-      <div class="topbar-links">
-        <a href="https://github.com/MatthewDuke1">Profile</a>
-        <a href="#pinned">Projects</a>
-        <a href="https://the-duke.org">the-duke.org</a>
-      </div>
-    </div>
-  </div>
+<a class="skip" href="#main">Skip to content</a>
 
-  <div class="container">
+<div class="shell">
 
-    <!-- Profile header -->
-    <div class="profile">
-      <div class="profile-inner">
-        <img class="avatar" src="headshot.png" alt="Matt Duke" />
-        <div class="profile-info">
-          <h1>Matt Duke <span class="profile-badge">Open to Work</span></h1>
-          <div class="handle">MatthewDuke1</div>
-          <p class="bio">I design the things you aren't thinking about or don't venture to try.<br>Apps should be stupid simple to pick up and put down.</p>
-          <div style="margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" class="btn btn-primary" id="openResumeBtn" aria-haspopup="dialog" aria-controls="resumeModal">
-              <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M2 1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 8 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg>
-              View my resume
+  <header class="masthead">
+    <div class="wordmark"><a href="https://the-duke.org/">Matt Duke</a></div>
+    <nav class="mast-nav" aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#activity">Activity</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+      <button type="button" class="theme-btn" id="themeBtn" aria-label="Switch colour theme">
+        <svg class="sun" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0V3.5A.75.75 0 0 1 8 2.75Zm0 9a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0V12.5a.75.75 0 0 1 .75-.75ZM2.75 8a.75.75 0 0 1 .75-.75H4a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 2.75 8Zm9.25 0a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 12 8ZM4.11 4.11a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 1 1-1.06 1.06l-.35-.35a.75.75 0 0 1 0-1.06Zm6.37 6.37a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 1 1-1.06 1.06l-.35-.35a.75.75 0 0 1 0-1.06Zm1.41-6.37a.75.75 0 0 1 0 1.06l-.35.35a.75.75 0 0 1-1.06-1.06l.35-.35a.75.75 0 0 1 1.06 0ZM5.52 10.48a.75.75 0 0 1 0 1.06l-.35.35a.75.75 0 0 1-1.06-1.06l.35-.35a.75.75 0 0 1 1.06 0Z"/></svg>
+        <svg class="moon" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M9.598 1.591a.75.75 0 0 1 .785-.175 7 7 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Z"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Open to Forward Deployed roles</p>
+          <h1>I build the small things<br />nobody <em>got around to</em>.</h1>
+          <p class="standfirst">
+            Forward Deployed Engineer in Dallas. Ten years shipping AI, cloud &amp; cybersecurity
+            products inside customer environments &mdash; at Deloitte by day, and on
+            <strong>three live products</strong> of my own the rest of the time. Every one of them
+            is small enough to understand in an afternoon and deployable to your own AWS account
+            in one command.
+          </p>
+          <div class="hero-actions">
+            <button type="button" class="btn btn-solid" id="cvOpen" aria-haspopup="dialog" aria-controls="cvSheet">
+              <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 8 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+              Read the resume
             </button>
-            <a class="btn" href="https://github.com/MatthewDuke1" target="_blank" rel="noopener">Follow on GitHub</a>
-          </div>
-          <div class="profile-meta">
-            <span>
-              <svg height="16" viewBox="0 0 16 16" width="16"><path d="m12.596 11.596-3.535 3.536a1.5 1.5 0 0 1-2.122 0l-3.535-3.536a6.5 6.5 0 1 1 9.192-9.193 6.5 6.5 0 0 1 0 9.193Zm-1.06-8.132v-.001a5 5 0 1 0-7.072 7.072L8 14.07l3.536-3.535a5 5 0 0 0 0-7.072ZM8 8.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"></path></svg>
-              Dallas, TX
-            </span>
-            <span>
-              <svg height="16" viewBox="0 0 16 16" width="16"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"></path></svg>
-              <a href="https://the-duke.org" target="_blank" rel="noopener">the-duke.org</a>
-            </span>
-            <span>
-              <svg height="16" viewBox="0 0 16 16" width="16"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25Zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0Z"></path></svg>
-              <a href="https://www.linkedin.com/in/the-duke/" target="_blank" rel="noopener">linkedin.com/in/the-duke</a>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Notice -->
-    <div class="notice">
-      <strong>Note:</strong> In addition to the public apps below, I work across <strong>27 private repositories</strong> (client work, internal tooling, and early-stage product prototypes) that don't appear on the public GitHub graph. This page provides a transparent look at real engineering output.
-    </div>
-
-    <!-- Stats -->
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">Merged Pull Requests</div>
-        <div class="stat-number">252</div>
-        <div class="stat-sub">this year &middot; 288 all time</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Commits</div>
-        <div class="stat-number">870+</div>
-        <div class="stat-sub">authored across all repos</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Private Repositories</div>
-        <div class="stat-number">27</div>
-        <div class="stat-sub">not shown on public graph</div>
-      </div>
-    </div>
-
-    <!-- Pinned apps (from the-duke.org) -->
-    <div class="section" id="pinned">
-      <div class="section-header">
-        <svg height="16" viewBox="0 0 16 16" width="16"><path d="m11.294.984 3.722 3.722a1.75 1.75 0 0 1-.504 2.826l-1.327.613a3.089 3.089 0 0 1-.851.251l-.878 3.288a.75.75 0 0 1-1.268.333L7.75 9.81l-1.448 1.448A4.182 4.182 0 0 1 5 15.25a.75.75 0 0 1-1.28.53l-2.5-2.5a.75.75 0 0 1 .53-1.28 4.182 4.182 0 0 1 3.992-1.302L7.19 9.25 4.738 6.81c-.334-.334-.186-.905.252-1.053l3.16-1.067a3.077 3.077 0 0 1 .842-.85l.613-1.328a1.75 1.75 0 0 1 2.69-.528Z"></path></svg>
-        Featured Apps
-        <span class="count">3 live</span>
-      </div>
-      <div class="pinned-grid">
-
-        <div class="repo-card">
-          <div class="repo-header">
-            <svg height="16" viewBox="0 0 16 16" width="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>
-            <a class="repo-name" href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app" target="_blank" rel="noopener">birthday-reminder-gifting-app</a>
-            <span class="repo-visibility">Public</span>
-          </div>
-          <p class="repo-desc">Remembers birthdays and emails you a week ahead &mdash; with Etsy and Amazon gift links chosen from how each person is filed. Runs on a schedule in AWS, so it works whether or not a browser is open. Imports from Google Calendar, Apple Contacts, Outlook, and CSV. <strong style="color: var(--text);">Deployable to your own AWS account in one command.</strong></p>
-          <div class="repo-meta">
-            <div class="repo-lang">
-              <span class="lang-dot dot-html"></span>
-              <span>HTML &middot; Node 20 &middot; CloudFormation</span>
-            </div>
-            <span>Saves ~50 hrs/yr</span>
-            <span>~$0/mo to run</span>
-          </div>
-          <div class="repo-links">
-            <a href="https://matthewduke1.github.io/birthday-reminder-gifting-app/" target="_blank" rel="noopener">
-              <svg height="12" viewBox="0 0 16 16" width="12"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25Zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0Z"></path></svg>
-              Live app
+            <a class="btn" href="https://github.com/MatthewDuke1" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+              GitHub
             </a>
-            <a href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app/tree/main/deploy" target="_blank" rel="noopener">
-              <svg height="12" viewBox="0 0 16 16" width="12"><path d="M7.25 1.25a.75.75 0 0 1 1.5 0v6.44l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 0 1 1.06-1.06l1.72 1.72V1.25ZM2 12.25a.75.75 0 0 1 .75.75v1.25h10.5V13a.75.75 0 0 1 1.5 0v1.5a.75.75 0 0 1-.75.75H1.75a.75.75 0 0 1-.75-.75V13a.75.75 0 0 1 .75-.75Z"></path></svg>
-              Deploy your own
-            </a>
-            <a href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app" target="_blank" rel="noopener">
-              <svg height="12" viewBox="0 0 16 16" width="12"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
-              Source
-            </a>
+            <a class="btn" href="https://www.linkedin.com/in/the-duke/" target="_blank" rel="noopener">LinkedIn</a>
           </div>
-          <details class="vision">
-            <summary>Product Vision <span class="vision-tag">Productivity &amp; QOL</span></summary>
-            <div class="vision-body">
-              <p>Forgetting a birthday isn't a memory problem &mdash; it's a calendar and queue problem. This is a pure <strong>productivity and quality-of-life tool</strong>: it ingests the contacts you already have (Google, Apple, Outlook, CSV), emails you a week ahead so you have time to pick something thoughtful, and puts the shopping links right in that email.</p>
-              <p>The result: no more awkward "happy belated" texts, and roughly <strong>50 hours/yr</strong> of background mental overhead reclaimed &mdash; the quiet anxiety of wondering which relationships you're letting slip just goes away.</p>
-            </div>
-          </details>
-          <details class="vision">
-            <summary>Run it yourself <span class="vision-tag">One command &middot; ~$0/mo</span></summary>
-            <div class="vision-body">
-              <p>The whole backend is one CloudFormation template. It builds the database, both functions, the API, the daily schedule, and scoped IAM roles <strong>in your own AWS account</strong> &mdash; nothing reports back to mine.</p>
-              <p style="font-family:monospace;font-size:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">aws cloudformation deploy --template-file deploy/template.yaml \<br />&nbsp;&nbsp;--stack-name bdayapp --capabilities CAPABILITY_IAM</p>
-              <p><strong style="color: var(--text);">What you get</strong></p>
-              <ul style="margin:6px 0 12px 18px;padding:0;">
-                <li>Automatic reminders at 7 days, 1 day, and day-of &mdash; sent whether or not a browser is open</li>
-                <li>Etsy and Amazon gift links in the email, with the search chosen from how each person is filed (a "Sister" gets <em>gifts for sister</em>; a note like <em>loves pottery</em> takes priority)</li>
-                <li>Cloud sync, so the list survives a cleared browser and works on multiple devices</li>
-                <li>Import from .ics, .vcf, or CSV; export to CSV plus a lossless JSON backup with restore</li>
-                <li>No login step &mdash; the password is baked in at build time from a repo secret</li>
-                <li>Idempotent sends: one marker per person, per year, per offset, so a retry never double-sends</li>
-              </ul>
-              <p><strong style="color: var(--text);">What it costs</strong></p>
-              <p>Every service is pay-per-request or inside a permanent free tier, and a household-sized list doesn't come close to exhausting either. Lambda, DynamoDB, API Gateway, EventBridge, SES and CloudWatch all land at zero; SES bills $0.10 per 1,000 emails, so ~30 reminders a month rounds to nothing. Realistic bill: <strong>$0.00&ndash;$0.50/month</strong>. Cost Explorer reports <strong>$0.00</strong> for these services against the live stack over the last 30 days.</p>
-              <p>The only genuine costs are optional: a Route 53 hosted zone ($0.50/mo) and a domain (~$12/yr), needed only if you want reminders sent from your own domain &mdash; which is worth doing, since mail sent <em>as</em> a gmail.com address through SES fails Gmail's own DMARC policy and lands in spam.</p>
-            </div>
-          </details>
-        </div>
-
-        <div class="repo-card">
-          <div class="repo-header">
-            <svg height="16" viewBox="0 0 16 16" width="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>
-            <a class="repo-name" href="https://github.com/MatthewDuke1/find-me-people" target="_blank" rel="noopener">sula</a>
-            <span class="live-badge">Published</span>
-          </div>
-          <p class="repo-desc">Browser extension for consumer advocacy (formerly Find Me People). Surfaces the real customer service contacts companies hide behind chatbot walls, shows your refund deadlines, drafts the letter that gets your money back, and tracks subscriptions. Zero tracking. <strong style="color: var(--text);">Live on the Chrome Web Store &mdash; <a href="https://trysula.com/" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline">trysula.com</a>.</strong></p>
-          <div class="repo-meta">
-            <div class="repo-lang">
-              <span class="lang-dot dot-js"></span>
-              <span>JavaScript</span>
-            </div>
-            <span>Saves 20+ hrs/yr</span>
-          </div>
-          <div class="repo-links">
-            <a class="chrome-btn" href="https://chromewebstore.google.com/detail/find-me-people/ngfklhkcicocfchdmepiajdmboialikf" target="_blank" rel="noopener">
-              <svg height="14" viewBox="0 0 24 24" width="14" fill="currentColor"><path d="M12 2a10 10 0 0 1 8.66 5H12a5 5 0 0 0-4.9 4H3.34A10 10 0 0 1 12 2zm0 20a10 10 0 0 1-8.66-5h7.32a5 5 0 0 0 4.24-2.5l-3.66 6.34A10 10 0 0 1 12 22zm10-10a10 10 0 0 1-1.34 5l-3.66-6.33A4.96 4.96 0 0 0 17 12a5 5 0 0 0-.76-2.66L19.9 3a10 10 0 0 1 2.1 9zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
-              Install from Chrome Web Store
-            </a>
-            <a href="https://github.com/MatthewDuke1/find-me-people" target="_blank" rel="noopener">
-              <svg height="12" viewBox="0 0 16 16" width="12"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
-              Source
-            </a>
-          </div>
-          <details class="vision">
-            <summary>Product Vision <span class="vision-tag">Anti-Annoyance</span></summary>
-            <div class="vision-body">
-              <p>A <strong>simple scripting tool that runs in Chrome or Firefox</strong> &mdash; nothing more. It doesn't scan the page, doesn't shove a chatbot at you, doesn't ship your queries off to a third-party LLM, and doesn't burn CPU on every site you visit. It just quietly surfaces the customer service email, phone number, or business hours that the page is already trying to bury.</p>
-              <p>That's the whole point: <strong>bypass the annoyance economy</strong>. No login walls, no "let me connect you to an agent," no chatbot sycophancy. Saves the average user <strong>up to 20 hours/yr</strong> with effectively zero compute cost &mdash; you'll never notice it's running until you need it.</p>
-            </div>
-          </details>
-        </div>
-
-        <div class="repo-card">
-          <div class="repo-header">
-            <svg height="16" viewBox="0 0 16 16" width="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>
-            <a class="repo-name" href="https://github.com/MatthewDuke1/ai-starter-guide" target="_blank" rel="noopener">ai-starter-guide</a>
-            <span class="repo-visibility">Public</span>
-          </div>
-          <p class="repo-desc">Interactive guide for people who want to use AI but don't know where to start. Pick a goal, get curated tool recommendations with free credits and differentiators. 100+ tools, 12 categories.</p>
-          <div class="repo-meta">
-            <div class="repo-lang">
-              <span class="lang-dot dot-html"></span>
-              <span>HTML</span>
-            </div>
-            <span>Saves ~75 hrs/yr</span>
-          </div>
-          <div class="repo-links">
-            <a href="https://the-duke.org" target="_blank" rel="noopener">
-              <svg height="12" viewBox="0 0 16 16" width="12"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25Zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0Z"></path></svg>
-              Live app
-            </a>
-            <a href="https://github.com/MatthewDuke1/ai-starter-guide" target="_blank" rel="noopener">
-              <svg height="12" viewBox="0 0 16 16" width="12"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
-              Source
-            </a>
-          </div>
-          <details class="vision">
-            <summary>Product Vision <span class="vision-tag">Decision Shortcut</span></summary>
-            <div class="vision-body">
-              <p>The AI tooling landscape is overwhelming &mdash; hundreds of products, every landing page promising to change your life, and most newcomers waste days bouncing between demos trying to figure out which one actually fits their use case.</p>
-              <p>This guide flips the model: <strong>pick a goal, get a curated shortlist</strong>. 100+ tools across 12 categories, with the free credits, real differentiators, and gotchas surfaced upfront so you can make a decision in minutes instead of weeks. Collapses what's normally a <strong>~75 hour</strong> evaluation slog into a 10-minute one &mdash; with no signup, no email capture, no upsell.</p>
-            </div>
-          </details>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Portfolio repos -->
-    <div class="section">
-      <div class="section-header">
-        <svg height="16" viewBox="0 0 16 16" width="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>
-        Portfolio &amp; Supporting Repos
-      </div>
-      <div class="pinned-grid">
-
-        <div class="repo-card">
-          <div class="repo-header">
-            <svg height="16" viewBox="0 0 16 16" width="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-            <a class="repo-name" href="https://github.com/MatthewDuke1/ai-portfolio" target="_blank" rel="noopener">ai-portfolio</a>
-            <span class="repo-visibility">Public</span>
-          </div>
-          <p class="repo-desc">Matt's Mini Apps portfolio — the public-facing site at the-duke.org. Showcases all three live apps with descriptions, annual hours saved, and fork buttons.</p>
-          <div class="repo-meta">
-            <div class="repo-lang"><span class="lang-dot dot-html"></span><span>HTML</span></div>
-          </div>
-        </div>
-
-        <div class="repo-card">
-          <div class="repo-header">
-            <svg height="16" viewBox="0 0 16 16" width="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"></path></svg>
-            <a class="repo-name" href="https://github.com/MatthewDuke1/github-activity" target="_blank" rel="noopener">github-activity</a>
-            <span class="repo-visibility">Public</span>
-          </div>
-          <p class="repo-desc">This page. A transparent contribution dashboard for employers since private org contributions don't show up on the public GitHub graph.</p>
-          <div class="repo-meta">
-            <div class="repo-lang"><span class="lang-dot dot-html"></span><span>HTML</span></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Tech stack -->
-    <div class="tech-section">
-      <div class="section-header">
-        <svg height="16" viewBox="0 0 16 16" width="16"><path d="M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.249 1.249 0 0 1-.871.354h-.302a1.25 1.25 0 0 1-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004L9.503.429Z"></path></svg>
-        Tech Stack
-      </div>
-      <div class="tech-grid">
-        <span class="tech-tag">JavaScript</span>
-        <span class="tech-tag">TypeScript</span>
-        <span class="tech-tag">Python</span>
-        <span class="tech-tag">HTML / CSS</span>
-        <span class="tech-tag">React</span>
-        <span class="tech-tag">React Native</span>
-        <span class="tech-tag">Next.js</span>
-        <span class="tech-tag">Node.js</span>
-        <span class="tech-tag">Express</span>
-        <span class="tech-tag">Chrome Extensions (MV3)</span>
-        <span class="tech-tag">Tailwind CSS</span>
-        <span class="tech-tag">Material-UI</span>
-        <span class="tech-tag">Supabase / Postgres</span>
-        <span class="tech-tag">AWS Amplify</span>
-        <span class="tech-tag">AWS Lambda / SES</span>
-        <span class="tech-tag">DynamoDB</span>
-        <span class="tech-tag">GraphQL / AppSync</span>
-        <span class="tech-tag">Git &amp; GitHub Actions</span>
-        <span class="tech-tag">Stripe</span>
-        <span class="tech-tag">Vercel</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <div class="container">
-      Matt Duke &mdash; Dallas, TX &mdash;
-      <a href="https://the-duke.org">the-duke.org</a> &middot;
-      <a href="https://github.com/MatthewDuke1">GitHub</a> &middot;
-      <a href="https://www.linkedin.com/in/the-duke/">LinkedIn</a>
-      <br><br>
-      Last updated August 2026 &middot; Theme based on GitHub Dark Mode
-    </div>
-  </div>
-
-  <!-- Resume modal -->
-  <div class="modal-overlay" id="resumeModal" role="dialog" aria-modal="true" aria-labelledby="resumeModalTitle" hidden>
-    <div class="modal" role="document">
-      <div class="modal-header">
-        <div class="modal-title" id="resumeModalTitle">Matt Duke &mdash; Resume</div>
-        <button type="button" class="modal-close" id="closeResumeBtn" aria-label="Close resume">
-          <svg height="18" viewBox="0 0 16 16" width="18"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg>
-        </button>
-      </div>
-      <div class="modal-body">
-
-        <div class="resume-head">
-          <h2>Matt Duke</h2>
-          <div class="resume-contact">
-            Dallas, TX &middot; +1 (619) 756-5184 &middot;
-            <a href="mailto:matthewduke0@gmail.com">matthewduke0@gmail.com</a><br>
-            US Citizen &middot; Active Secret Clearance<br>
-            <a href="https://www.linkedin.com/in/the-duke/" target="_blank" rel="noopener">LinkedIn</a> &middot;
-            <a href="https://the-duke.org/" target="_blank" rel="noopener">the-duke.org</a>
-          </div>
-        </div>
-
-        <div class="resume-section">
-          <h3>Profile</h3>
-          <p class="resume-profile">Results-driven Product Leader with deep expertise in AI platforms, GTM strategy, cloud ecosystems, and zero-to-one implementations. Excel at managing product portfolios and large cross-functional teams (45+ people) and driving product innovation within highly regulated environments.</p>
-        </div>
-
-        <div class="resume-section">
-          <h3>Work Experience &mdash; 10 Years</h3>
-
-          <div class="resume-job">
-            <div class="resume-job-head">
-              <div><span class="resume-job-title">Product Leader</span> &middot; <span class="resume-job-company">Deloitte</span></div>
-              <div class="resume-job-dates">Mar 2021 &mdash; Present</div>
-            </div>
-            <ul>
-              <li>Manage a $1.2B cyber pipeline via technical leadership, GTM strategy, client execution, and business development. Alliance Manager for Splunk, Cribl, and Databricks partnerships.</li>
-              <li>Led Deloitte &amp; Amazon (AWS) partnership ConvergeSecurity: exploring customer needs and building out cyber features.</li>
-              <li>Leader in the creation and deployment of the Datalake + AI Detection platform, generating over $50M in sales. Led GTM for AI algorithms that significantly enhanced threat detection across government, global, and commercial clients.</li>
-              <li>Directed strategic development and operational management of the MXDR and CAE SIEM platforms, leading a team of 17 to deliver cloud-based solutions that improved real-time threat response and client retention.</li>
-              <li>Orchestrated go-to-market strategies and pricing structures that unified Deloitte's cybersecurity offerings into Cybersphere, enhancing market competitiveness and customer adoption.</li>
-              <li>Led and sold a new SOC-based Agentic AI greenfield product from concept to completion, leveraging existing partnerships to boost sales.</li>
-              <li>Pioneered the ISAM project to integrate robotics and AI in aerospace manufacturing. Executed AWS optimizations that saved over $1M annually for Fortune-50 clients.</li>
-            </ul>
-          </div>
-
-          <div class="resume-job">
-            <div class="resume-job-head">
-              <div><span class="resume-job-title">Lead Product Solutions Engineer / AWS Architect</span> &middot; <span class="resume-job-company">MasVida Health Care Solutions</span></div>
-              <div class="resume-job-dates">May 2020 &mdash; Mar 2021</div>
-            </div>
-            <ul>
-              <li>Sole Product &amp; Technical Architect for a portfolio of 4 companies across health-tech, manufacturing, insurance, and real estate.</li>
-              <li>Architected, designed, and implemented an LMS for clients including ABM, CBRE, and Cushman &amp; Wakefield, supporting 25,000+ MAU. Enhanced engagement via A/B testing and heat-mapping.</li>
-              <li>Engineered system optimizations that resulted in a 37% reduction in operational technology costs across multiple client organizations.</li>
-              <li>Authored Lambda functions for real-time firewall log analysis (Watchguard), presenting findings to C-suite to secure buy-in for further data engineering efforts.</li>
-            </ul>
-          </div>
-
-          <div class="resume-job">
-            <div class="resume-job-head">
-              <div><span class="resume-job-title">Product Solutions Architect</span> &middot; <span class="resume-job-company">Active Interest Media (AIM)</span></div>
-              <div class="resume-job-dates">Apr 2019 &mdash; May 2020</div>
-            </div>
-            <ul>
-              <li>Architectural design and deployment leader of FitPost, a B2B2C social media app for personal trainers, achieving 50,000+ MAU.</li>
-              <li>Directed UI/UX testing (A/B, QA) which improved feature adoption by 30% and increased MAUs by 22%.</li>
-              <li>Managed dev and marketing team sync via Hubspot CRM, integrating Facebook (Meta) and Twitter (X) APIs to enhance community growth.</li>
-              <li>Orchestrated the full SDLC using agile methodologies to accelerate delivery and exceed performance targets.</li>
-              <li>Partnered with UX/UI and QA teams to enforce user-centric design, resulting in fewer bugs and improved product reliability.</li>
-            </ul>
-          </div>
-
-          <div class="resume-job">
-            <div class="resume-job-head">
-              <div><span class="resume-job-title">Product Solutions Expert</span> &middot; <span class="resume-job-company">Novelty Media</span></div>
-              <div class="resume-job-dates">Jan 2018 &mdash; Apr 2019</div>
-            </div>
-            <ul>
-              <li>Led ad-tech innovations using data analytics and ML to automate content personalization, boosting engagement and supporting client acquisition in the saturated mar-tech space.</li>
-              <li>Spearheaded the redesign of Novelty Media's UI, increasing CTR by 57% and user retention by 19% through strategic content optimization and AI analytics for predictive behavior modeling.</li>
-            </ul>
-          </div>
-
-          <div class="resume-job">
-            <div class="resume-job-head">
-              <div><span class="resume-job-title">Developer / Consultant</span> &middot; <span class="resume-job-company">Freelance</span></div>
-              <div class="resume-job-dates">Mar 2016 &mdash; Apr 2019</div>
-            </div>
-            <ul>
-              <li>Revamped AmegoEV's UI using user feedback and advanced analytics, resulting in a 46% increase in annual revenue and $730K growth QoQ. Led end-to-end market research, development, and product vision for Wiseattend.com.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="resume-section">
-          <h3>Education &amp; Certifications</h3>
-          <p><strong>B.S. in Computer Science</strong> &mdash; University of Southern California (USC)</p>
-          <p style="margin-top: 10px; color: var(--text-muted); font-size: 13px;">
-            AWS Certified Machine Learning &middot; Security+ &middot; CISSP (In View) &middot; AWS Solutions Architect Associate (SAA-C02) &middot; AWS Developer Associate &middot; Certified Scrum Product Owner (CSPO) &middot; Microsoft Azure Fundamentals (AZ-900) &middot; AZ-500 Security Engineer (Koenig Solutions) &middot; Claude in Amazon Bedrock &middot; Professional Scrum Master &middot; Databricks Fundamentals &amp; Agentic AI Fundamentals &middot; Cribl Certified User &amp; Cribl Admin Stream (L1 &amp; L2) &middot; Kubernetes Fundamentals
+          <p class="meta-line">
+            <span>Dallas, TX</span>
+            <span>US Citizen &middot; Active DoD Secret Clearance</span>
+            <span><a href="mailto:matthewduke0@gmail.com">matthewduke0@gmail.com</a></span>
           </p>
         </div>
+        <img class="portrait" src="headshot.png" alt="Matt Duke" width="174" height="174" />
+      </div>
+    </section>
 
-        <div class="resume-section">
-          <h3>Skills</h3>
-          <div class="resume-skills-block">
-            <strong>Technical:</strong>
-            <span>Strategic Product Management &middot; Go-To-Market zero-to-one &middot; Data Engineering Leader &middot; Product Lifecycle Planning &middot; Market Analysis &amp; Competitor Research &middot; Agile Project Leadership &middot; Cloud Security Best Practices &middot; Risk Assessment &amp; Mitigation &middot; Regulatory Compliance (HIPAA, PHI, GDPR) &middot; Cross-Functional Team Leadership &middot; Product-Market Fit Analysis &middot; Data-Driven Decision Making &middot; Customer Experience Enhancement &middot; Prototype Development &amp; Testing &middot; Stakeholder Engagement &middot; Contract Negotiation &amp; Vendor Management &middot; Sales Strategy &amp; Market Penetration &middot; Budget Management &amp; Cost Optimization &middot; Scrum and Agile Methodologies</span>
+    <div class="spine">
+
+      <!-- ===================== ACTIVITY ===================== -->
+      <section class="row" id="activity">
+        <p class="rail">Activity</p>
+        <div>
+          <div class="figures">
+            <div class="figure">
+              <span class="figure-n">270</span>
+              <span class="figure-k">Merged PRs, 2026</span>
+              <span class="figure-s">307 merged all time</span>
+            </div>
+            <div class="figure">
+              <span class="figure-n">374</span>
+              <span class="figure-k">Contributions, 2026</span>
+              <span class="figure-s">186 commits &middot; 181 PRs opened</span>
+            </div>
+            <div class="figure">
+              <span class="figure-n">30</span>
+              <span class="figure-k">Repositories</span>
+              <span class="figure-s">25 public &middot; 5 private</span>
+            </div>
+            <div class="figure">
+              <span class="figure-n">3</span>
+              <span class="figure-k">Products live</span>
+              <span class="figure-s">Chrome Web Store &amp; the open web</span>
+            </div>
           </div>
-          <div class="resume-skills-block">
-            <strong>Software:</strong>
-            <span>Python &middot; JavaScript &middot; PHP &middot; SQL &middot; React &middot; Tableau &middot; Power BI &middot; Figma &middot; Cribl &middot; Splunk &middot; Databricks &middot; Snowflake &middot; Adobe Suite &middot; Aha!</span>
+
+          <div class="spark">
+            <div class="spark-head">
+              <span>Contributions by month</span>
+              <span>2026</span>
+            </div>
+            <div class="spark-bars" role="img" aria-label="Monthly contributions in 2026: January none, February none, March none, April 81, May 31, June 129, July 71, August 62 so far.">
+              <div class="spark-bar" data-empty></div>
+              <div class="spark-bar" data-empty></div>
+              <div class="spark-bar" data-empty></div>
+              <div class="spark-bar" style="height:63%"></div>
+              <div class="spark-bar" style="height:24%"></div>
+              <div class="spark-bar" style="height:100%"></div>
+              <div class="spark-bar" style="height:55%"></div>
+              <div class="spark-bar" style="height:48%"></div>
+            </div>
+            <div class="spark-axis" aria-hidden="true">
+              <span>J</span><span>F</span><span>M</span><span>A</span>
+              <span>M</span><span>J</span><span>J</span><span>A</span>
+            </div>
+            <p class="spark-note">
+              The graph starts in April because that is when I started shipping my own products
+              rather than only client work. August is partial.
+            </p>
+          </div>
+
+          <p class="footnote">
+            Client and internal work lives in <strong>private repositories</strong> and never
+            reaches the public graph, so the figures above undercount the real output. Everything
+            listed as a product below is public, running, and open to inspection.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== WORK ===================== -->
+      <section class="row" id="work">
+        <p class="rail">Work</p>
+        <div class="entries">
+
+          <!-- Sula -->
+          <article class="entry">
+            <div class="entry-top">
+              <h2 class="entry-name"><a href="https://trysula.com/" target="_blank" rel="noopener">Sula</a></h2>
+              <span class="tag tag-live"><span class="dot" aria-hidden="true"></span> On the Chrome Web Store</span>
+              <span class="tag tag-push">Consumer advocacy</span>
+            </div>
+            <p class="entry-lede">
+              A browser extension that fights the annoyance economy. It surfaces the real customer
+              service contacts companies bury behind chatbot walls, shows how many days are left on
+              your refund window, drafts the letter that gets the money back, and keeps track of the
+              subscriptions quietly renewing on you. <strong>No tracking, no account, no LLM
+              round-trip on the page you are reading.</strong>
+            </p>
+            <p class="entry-facts">
+              <span><b>Stack</b> TypeScript &middot; Manifest V3 &middot; AWS Lambda &middot; DynamoDB</span>
+              <span><b>Tests</b> 343 automated</span>
+              <span><b>Billing</b> LemonSqueezy licensing</span>
+            </p>
+            <div class="entry-links">
+              <a class="link-chip link-chip-em" href="https://chromewebstore.google.com/detail/find-me-people/ngfklhkcicocfchdmepiajdmboialikf" target="_blank" rel="noopener">
+                <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 1 8.66 5H12a5 5 0 0 0-4.9 4H3.34A10 10 0 0 1 12 2zm0 20a10 10 0 0 1-8.66-5h7.32a5 5 0 0 0 4.24-2.5l-3.66 6.34A10 10 0 0 1 12 22zm10-10a10 10 0 0 1-1.34 5l-3.66-6.33A4.96 4.96 0 0 0 17 12a5 5 0 0 0-.76-2.66L19.9 3a10 10 0 0 1 2.1 9zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+                Install for Chrome
+              </a>
+              <a class="link-chip" href="https://trysula.com/" target="_blank" rel="noopener">trysula.com</a>
+              <a class="link-chip" href="https://github.com/MatthewDuke1/find-me-people" target="_blank" rel="noopener">Source</a>
+            </div>
+            <details class="note">
+              <summary>Why it exists <span class="note-tag">Product thinking</span></summary>
+              <div class="note-body">
+                <p>
+                  Getting a refund is not hard because the rules are complicated. It is hard because
+                  companies make it expensive in <strong>time</strong> &mdash; the phone number is
+                  three menus deep, the chatbot is designed to outlast you, and the refund window
+                  closes while you are still being transferred.
+                </p>
+                <p>
+                  Sula removes the cost rather than the rules. It sits quietly until you need it,
+                  then hands you the contact, the deadline, and the letter. Roughly
+                  <strong>20 hours a year</strong> back, and nothing leaves your machine except a
+                  license check.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <!-- Birthday app -->
+          <article class="entry">
+            <div class="entry-top">
+              <h2 class="entry-name"><a href="https://matthewduke1.github.io/birthday-reminder-gifting-app/" target="_blank" rel="noopener">Birthday Reminder</a></h2>
+              <span class="tag tag-live"><span class="dot" aria-hidden="true"></span> Live</span>
+              <span class="tag tag-push">Deploy your own</span>
+            </div>
+            <p class="entry-lede">
+              Emails you a week before a birthday, with Etsy and Amazon links already chosen from
+              how that person is filed &mdash; a sister gets <em>gifts for sister</em>; a note
+              saying <em>loves pottery</em> wins over the label. It runs on a schedule in AWS, so it
+              works whether or not a browser is open. Imports from Google Calendar, Apple Contacts,
+              Outlook, and CSV.
+            </p>
+            <p class="entry-facts">
+              <span><b>Stack</b> Lambda &middot; DynamoDB &middot; SES &middot; EventBridge &middot; CloudFormation</span>
+              <span><b>Runs at</b> $0.00&ndash;$0.50/mo</span>
+              <span><b>Setup</b> one command</span>
+            </p>
+            <div class="entry-links">
+              <a class="link-chip link-chip-em" href="https://matthewduke1.github.io/birthday-reminder-gifting-app/" target="_blank" rel="noopener">Open the app</a>
+              <a class="link-chip" href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app/tree/main/deploy" target="_blank" rel="noopener">Deploy to your AWS</a>
+              <a class="link-chip" href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app" target="_blank" rel="noopener">Source</a>
+            </div>
+            <details class="note">
+              <summary>Run it in your own account <span class="note-tag">One command</span></summary>
+              <div class="note-body">
+                <p>
+                  The entire backend is a single CloudFormation template. It creates the table, both
+                  functions, the API, the daily schedule, and scoped IAM roles
+                  <strong>in your account</strong> &mdash; nothing reports back to mine.
+                </p>
+                <div class="snippet">aws cloudformation deploy \
+  --template-file deploy/template.yaml \
+  --stack-name bdayapp \
+  --capabilities CAPABILITY_IAM</div>
+                <ul>
+                  <li>Reminders at 7 days, 1 day, and day-of, sent server-side</li>
+                  <li>Cloud sync, so the list survives a cleared browser</li>
+                  <li>Import <code>.ics</code>, <code>.vcf</code>, or CSV; export CSV plus a restorable JSON backup</li>
+                  <li>No login step &mdash; the password is baked in at build time from a repo secret</li>
+                  <li>Idempotent sends: one marker per person, per year, per offset, so a retry never double-sends</li>
+                </ul>
+              </div>
+            </details>
+            <details class="note">
+              <summary>What it actually costs <span class="note-tag">Measured, not estimated</span></summary>
+              <div class="note-body">
+                <p>
+                  Every service is pay-per-request or inside a permanent free tier, and a
+                  household-sized list does not come close to exhausting either. Lambda, DynamoDB,
+                  API Gateway, EventBridge, SES and CloudWatch all land at zero. SES bills
+                  $0.10 per 1,000 emails, so thirty reminders a month rounds to nothing.
+                  <strong>Cost Explorer reports $0.00 against the live stack over the last 30 days.</strong>
+                </p>
+                <p>
+                  The only real costs are optional: a Route&nbsp;53 hosted zone ($0.50/mo) and a
+                  domain (~$12/yr), needed only if you want mail sent from your own domain &mdash;
+                  worth doing, since mail sent <em>as</em> a gmail.com address through SES fails
+                  Gmail's own DMARC policy and lands in spam.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <!-- AI starter guide -->
+          <article class="entry">
+            <div class="entry-top">
+              <h2 class="entry-name"><a href="https://matthewduke1.github.io/ai-starter-guide/" target="_blank" rel="noopener">AI Starter Guide</a></h2>
+              <span class="tag tag-live"><span class="dot" aria-hidden="true"></span> Live</span>
+              <span class="tag tag-push">Decision shortcut</span>
+            </div>
+            <p class="entry-lede">
+              Pick a goal, get a shortlist. 100+ AI tools across 12 categories with the free credits,
+              the real differentiators, and the gotchas surfaced up front &mdash; so a decision takes
+              ten minutes instead of a fortnight of demos. No signup, no email capture, no upsell.
+            </p>
+            <p class="entry-facts">
+              <span><b>Stack</b> Static HTML &middot; no build step</span>
+              <span><b>Catalogue</b> 100+ tools &middot; 12 categories</span>
+            </p>
+            <div class="entry-links">
+              <a class="link-chip link-chip-em" href="https://matthewduke1.github.io/ai-starter-guide/" target="_blank" rel="noopener">Open the guide</a>
+              <a class="link-chip" href="https://github.com/MatthewDuke1/ai-starter-guide" target="_blank" rel="noopener">Source</a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ===================== STACK ===================== -->
+      <section class="row" id="stack">
+        <p class="rail">Stack</p>
+        <div class="stack-groups">
+          <div class="stack-group">
+            <p class="stack-label">Languages</p>
+            <div class="stack-items">
+              <span class="chip">TypeScript</span><span class="chip">JavaScript</span>
+              <span class="chip">Python</span><span class="chip">SQL</span>
+              <span class="chip">HTML / CSS</span>
+            </div>
+          </div>
+          <div class="stack-group">
+            <p class="stack-label">Front end</p>
+            <div class="stack-items">
+              <span class="chip">React</span><span class="chip">Redux</span>
+              <span class="chip">React Native</span><span class="chip">Next.js</span>
+              <span class="chip">Tailwind</span><span class="chip">Material UI</span>
+              <span class="chip">Chrome Extensions (MV3)</span>
+            </div>
+          </div>
+          <div class="stack-group">
+            <p class="stack-label">AWS</p>
+            <div class="stack-items">
+              <span class="chip">Lambda</span><span class="chip">DynamoDB</span>
+              <span class="chip">S3</span><span class="chip">Athena</span>
+              <span class="chip">EMR</span><span class="chip">Glue</span>
+              <span class="chip">SES</span><span class="chip">EventBridge</span>
+              <span class="chip">API Gateway</span><span class="chip">CloudFormation</span>
+              <span class="chip">Bedrock</span><span class="chip">Amplify</span>
+            </div>
+          </div>
+          <div class="stack-group">
+            <p class="stack-label">Data &amp; AI</p>
+            <div class="stack-items">
+              <span class="chip">Palantir Foundry</span><span class="chip">AIP Builder</span>
+              <span class="chip">Databricks</span><span class="chip">Snowflake</span>
+              <span class="chip">Splunk</span><span class="chip">Cribl</span>
+              <span class="chip">ETL pipelines</span><span class="chip">LLM integration</span>
+            </div>
+          </div>
+          <div class="stack-group">
+            <p class="stack-label">Platform</p>
+            <div class="stack-items">
+              <span class="chip">Node.js</span><span class="chip">Express</span>
+              <span class="chip">GraphQL / AppSync</span><span class="chip">Supabase / Postgres</span>
+              <span class="chip">GitHub Actions</span><span class="chip">Vercel</span>
+              <span class="chip">Stripe</span><span class="chip">LemonSqueezy</span>
+            </div>
           </div>
         </div>
+      </section>
 
+      <!-- ===================== CONTACT ===================== -->
+      <section class="row" id="contact">
+        <p class="rail">Contact</p>
+        <div class="closer">
+          <h2>If you are hiring someone to sit with the customer and build the thing, we should talk.</h2>
+          <p>
+            I am open to Forward Deployed Engineer and product roles &mdash; particularly the ones
+            where the work happens inside the customer's environment rather than at arm's length
+            from it. Fastest way to reach me is email.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-solid" href="mailto:matthewduke0@gmail.com">matthewduke0@gmail.com</a>
+            <button type="button" class="btn" id="cvOpen2" aria-haspopup="dialog" aria-controls="cvSheet">Read the resume</button>
+            <a class="btn" href="https://www.linkedin.com/in/the-duke/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="foot">
+    <span>Matt Duke &mdash; Dallas, TX</span>
+    <span class="foot-links">
+      <a href="https://github.com/MatthewDuke1">GitHub</a>
+      <a href="https://www.linkedin.com/in/the-duke/">LinkedIn</a>
+      <a href="https://trysula.com/">Sula</a>
+    </span>
+    <span>Figures verified 19 Aug 2026</span>
+  </footer>
+
+</div>
+
+<!-- ===================== RESUME ===================== -->
+<div class="scrim" id="cvSheet" role="dialog" aria-modal="true" aria-labelledby="cvSheetTitle" hidden>
+  <div class="sheet">
+    <div class="sheet-head">
+      <span class="sheet-title" id="cvSheetTitle">Matt Duke &mdash; Resume</span>
+      <button type="button" class="x" id="cvClose" aria-label="Close resume">
+        <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+
+      <div class="cv-head">
+        <h2>Matt Duke</h2>
+        <p class="cv-role">Forward Deployed Engineer &middot; AI, Cybersecurity &amp; Cloud</p>
+        <p class="cv-contact">
+          Dallas, TX &middot; +1 (619) 756-5184 &middot; <a href="mailto:matthewduke0@gmail.com">matthewduke0@gmail.com</a><br />
+          US Citizen &middot; Active DoD Secret Clearance<br />
+          <a href="https://www.linkedin.com/in/the-duke/" target="_blank" rel="noopener">LinkedIn</a> &middot;
+          <a href="https://the-duke.org/">the-duke.org</a>
+        </p>
       </div>
+
+      <section class="cv-sec">
+        <h3>Profile</h3>
+        <p class="cv-lede">
+          Forward Deployed Engineer and product leader with 10+ years writing production-grade
+          software and shipping AI, cloud, and cybersecurity solutions inside customer
+          environments. Comfortable owning the whole arc &mdash; technical discovery with the
+          customer, the architecture, the code, and the support that follows &mdash; in highly
+          regulated settings.
+        </p>
+      </section>
+
+      <section class="cv-sec">
+        <h3>Experience</h3>
+
+        <div class="cv-job">
+          <div class="cv-job-head">
+            <div><span class="cv-job-title">Product Leader</span> &middot; <span class="cv-job-org">Deloitte</span></div>
+            <span class="cv-job-when">Mar 2021 &mdash; Present</span>
+          </div>
+          <ul>
+            <li>Manage a $1.2B cyber pipeline across technical leadership, GTM strategy, client execution and business development. Alliance Manager for Splunk, Cribl and Databricks.</li>
+            <li>Directed the Datalake + AI Detection platform, generating over $50M in sales, and led GTM for the AI algorithms behind its threat detection across government, global and commercial clients.</li>
+            <li>Directed development and operations of the MXDR and CAE SIEM platforms, directing a 17-person team; stood up ETL data pipelines over business-critical data on S3 and Athena and built compliance reporting hands-on inside customer environments.</li>
+            <li>Took a greenfield Agentic AI SOC product (AI/LLM integration on Amazon Bedrock) from concept to first revenue in 3 months.</li>
+            <li>Led the Deloitte + AWS ConvergeSecurity partnership; executed AWS optimizations saving over $1M annually for Fortune-50 clients.</li>
+          </ul>
+        </div>
+
+        <div class="cv-job">
+          <div class="cv-job-head">
+            <div><span class="cv-job-title">Lead Product Solutions Engineer / AWS Architect</span> &middot; <span class="cv-job-org">MasVida Health Care Solutions</span></div>
+            <span class="cv-job-when">May 2020 &mdash; Mar 2021</span>
+          </div>
+          <ul>
+            <li>Sole product and technical architect across four companies in health-tech, manufacturing, insurance and real estate.</li>
+            <li>Architected and shipped an LMS for ABM, CBRE and Cushman &amp; Wakefield supporting 25,000+ monthly active users.</li>
+            <li>Engineered optimizations cutting operational technology costs 37% across client organizations.</li>
+            <li>Authored Lambda functions for real-time firewall log analysis, presenting findings to the C-suite to fund further data engineering.</li>
+          </ul>
+        </div>
+
+        <div class="cv-job">
+          <div class="cv-job-head">
+            <div><span class="cv-job-title">Product Solutions Architect</span> &middot; <span class="cv-job-org">Active Interest Media</span></div>
+            <span class="cv-job-when">Apr 2019 &mdash; May 2020</span>
+          </div>
+          <ul>
+            <li>Built and owned FitPost, a cloud-native B2B2C SaaS application for personal trainers, reaching 50,000+ monthly active users.</li>
+            <li>Directed UI/UX testing that lifted feature adoption 30% and monthly actives 22%.</li>
+            <li>Ran the full SDLC in agile delivery; integrated Meta and X APIs for community growth.</li>
+          </ul>
+        </div>
+
+        <div class="cv-job">
+          <div class="cv-job-head">
+            <div><span class="cv-job-title">Product Solutions Expert</span> &middot; <span class="cv-job-org">Novelty Media</span></div>
+            <span class="cv-job-when">Jan 2018 &mdash; Apr 2019</span>
+          </div>
+          <ul>
+            <li>Engineered ML-driven content personalization for a B2B SaaS ad-tech platform; increased click-through 57% and retention 19% through front-end UI redesign.</li>
+          </ul>
+        </div>
+
+        <div class="cv-job">
+          <div class="cv-job-head">
+            <div><span class="cv-job-title">Developer / Consultant</span> &middot; <span class="cv-job-org">Independent</span></div>
+            <span class="cv-job-when">Mar 2016 &mdash; Apr 2019</span>
+          </div>
+          <ul>
+            <li>Rapidly prototyped and built front-end user interfaces for clients using React, Redux and the React Native ecosystem.</li>
+            <li>Revamped AmegoEV's UI from user research and analytics, driving a 46% annual revenue increase and $730K growth QoQ. Led market research, development and product vision for Wiseattend.com.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="cv-sec">
+        <h3>Selected personal products</h3>
+        <div class="cv-kv">
+          <b>Sula</b> &mdash; consumer-advocacy browser extension, built and shipped solo. TypeScript,
+          Manifest V3, 343 automated tests and license-entitlement billing on an AWS serverless
+          backend (Lambda, DynamoDB, SES, EventBridge) with least-privilege IAM, packaged as a
+          one-command CloudFormation deployment any customer can run in their own account. Live on
+          the Chrome Web Store; featured on Product Hunt, BetaList and JustLaunched with zero paid
+          acquisition.
+        </div>
+        <div class="cv-kv">
+          <b>Birthday Reminder</b> &mdash; scheduled reminder service on Lambda, DynamoDB, SES and
+          EventBridge, deployable to a third-party AWS account in a single command.
+        </div>
+      </section>
+
+      <section class="cv-sec">
+        <h3>Education &amp; certifications</h3>
+        <div class="cv-kv"><b>B.S. Computer Science</b> &mdash; University of Southern California</div>
+        <div class="cv-kv">
+          Palantir Foundry &amp; AIP Builder Foundations &middot; AWS Certified Machine Learning &middot;
+          AWS Solutions Architect Associate &middot; AWS Developer Associate &middot; Security+ &middot;
+          CISSP (in view) &middot; Azure Fundamentals (AZ-900) &middot; AZ-500 Security Engineer &middot;
+          Claude in Amazon Bedrock &middot; Databricks Fundamentals &amp; Agentic AI Fundamentals &middot;
+          Cribl Certified User &amp; Admin Stream (L1 &amp; L2) &middot; Kubernetes Fundamentals &middot;
+          Certified Scrum Product Owner &middot; Professional Scrum Master
+        </div>
+      </section>
+
+      <section class="cv-sec">
+        <h3>Skills</h3>
+        <div class="cv-kv">
+          <b>Engineering</b> &mdash; TypeScript, JavaScript, Python, SQL, React / Redux / React Native,
+          Node.js, serverless architecture, ETL pipelines, AI/LLM integration, infrastructure as code,
+          CI/CD, cloud security.
+        </div>
+        <div class="cv-kv">
+          <b>Platforms</b> &mdash; AWS (Lambda, DynamoDB, S3, Athena, EMR, Glue, SES, EventBridge,
+          Bedrock, Amplify), Palantir Foundry &amp; AIP, Databricks, Snowflake, Splunk, Cribl.
+        </div>
+        <div class="cv-kv">
+          <b>Delivery</b> &mdash; forward-deployed customer engagement, technical discovery, zero-to-one
+          product, cross-functional leadership (45+ people), regulated environments (DoD, HIPAA, GDPR).
+        </div>
+      </section>
+
     </div>
   </div>
+</div>
 
-  <script>
-    (function () {
-      var overlay = document.getElementById('resumeModal');
-      var openBtn = document.getElementById('openResumeBtn');
-      var closeBtn = document.getElementById('closeResumeBtn');
-      var lastFocus = null;
+<script>
+(function () {
+  "use strict";
 
-      function open() {
-        lastFocus = document.activeElement;
-        overlay.hidden = false;
-        overlay.classList.add('is-open');
-        document.body.classList.add('modal-lock');
-        closeBtn.focus();
-      }
-      function close() {
-        overlay.classList.remove('is-open');
-        overlay.hidden = true;
-        document.body.classList.remove('modal-lock');
-        if (lastFocus) lastFocus.focus();
-      }
+  /* ---- theme ---- */
+  var root = document.documentElement;
+  var KEY = "duke-theme";
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+  } catch (e) {}
 
-      openBtn.addEventListener('click', open);
-      closeBtn.addEventListener('click', close);
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) close();
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && overlay.classList.contains('is-open')) close();
-      });
-    })();
-  </script>
+  var themeBtn = document.getElementById("themeBtn");
+  themeBtn.addEventListener("click", function () {
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var current = root.getAttribute("data-theme") || (systemDark ? "dark" : "light");
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+  });
+
+  /* ---- resume dialog ---- */
+  var scrim = document.getElementById("cvSheet");
+  var closeBtn = document.getElementById("cvClose");
+  var openers = [document.getElementById("cvOpen"), document.getElementById("cvOpen2")];
+  var lastFocus = null;
+
+  function openSheet() {
+    lastFocus = document.activeElement;
+    scrim.hidden = false;
+    scrim.classList.add("open");
+    document.body.classList.add("locked");
+    closeBtn.focus();
+  }
+  function closeSheet() {
+    scrim.classList.remove("open");
+    scrim.hidden = true;
+    document.body.classList.remove("locked");
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  openers.forEach(function (b) { if (b) b.addEventListener("click", openSheet); });
+  closeBtn.addEventListener("click", closeSheet);
+  scrim.addEventListener("click", function (e) { if (e.target === scrim) closeSheet(); });
+
+  document.addEventListener("keydown", function (e) {
+    if (!scrim.classList.contains("open")) return;
+    if (e.key === "Escape") { closeSheet(); return; }
+    if (e.key !== "Tab") return;
+
+    /* keep focus inside the dialog */
+    var f = scrim.querySelectorAll('a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+})();
+</script>
 
 </body>
 </html>

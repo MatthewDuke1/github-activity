@@ -1032,7 +1032,7 @@ body.locked { overflow: hidden; }
           <article class="entry">
             <div class="entry-top">
               <h2 class="entry-name">Clapped</h2>
-              <span class="tag">In progress</span>
+              <span class="tag tag-live"><span class="dot" aria-hidden="true"></span> Live</span>
               <span class="tag tag-push">Content pipeline</span>
             </div>
             <p class="entry-lede">
@@ -1046,6 +1046,7 @@ body.locked { overflow: hidden; }
               <span><b>Stack</b> ffmpeg &middot; bash &middot; no runtime deps</span>
               <span><b>Output</b> YouTube-ready MP4, shorts to 10&nbsp;hours</span>
               <span><b>Setup</b> one command</span>
+              <span><b>Repo</b> Private &mdash; in-house tooling</span>
             </p>
             <details class="note">
               <summary>Why it is a hub and not a script <span class="note-tag">Rapid content</span></summary>
@@ -1057,10 +1058,11 @@ body.locked { overflow: hidden; }
                   Clapped centralizes all of it, so the next video reuses the last one's decisions.
                 </p>
                 <ul>
-                  <li>Presets per format, so a short and a ten-hour bed come off the same pipeline</li>
+                  <li>One general pipeline, plus purpose-built variants for a format worth repeating</li>
                   <li>A still image or a seamless loop, blur-filled from square to clean 16:9</li>
                   <li>Audio playlists concatenated and looped to hit an exact target duration</li>
-                  <li>Sources tracked with their license, so nothing publishable is ever in doubt</li>
+                  <li>Two beds looping at different lengths, so ten hours never repeats on an audible cycle</li>
+                  <li>A rights check before publishing that stays a human step &mdash; the tooling cannot verify a license</li>
                 </ul>
               </div>
             </details>

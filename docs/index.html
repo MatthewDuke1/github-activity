@@ -4,12 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Matt Duke — Shipping Log</title>
-<meta name="description" content="Matt Duke — Forward Deployed Engineer in Dallas, TX. Three shipped products, 325 merged pull requests this year, and the AWS templates to run any of it yourself." />
+<meta name="description" content="Matt Duke — Forward Deployed Engineer in Dallas, TX. Two shipped products, 325 merged pull requests this year, and a browser extension past 500 installs." />
 <link rel="canonical" href="https://the-duke.org/" />
 
 <meta property="og:type" content="profile" />
 <meta property="og:title" content="Matt Duke — Shipping Log" />
-<meta property="og:description" content="Forward Deployed Engineer. Three shipped products, 325 merged pull requests this year, deployable to your own AWS account." />
+<meta property="og:description" content="Forward Deployed Engineer. Two shipped products, 325 merged pull requests this year, one live on the Chrome Web Store." />
 <meta property="og:url" content="https://the-duke.org/" />
 <meta property="og:image" content="https://the-duke.org/headshot.png" />
 <meta name="twitter:card" content="summary" />
@@ -29,7 +29,10 @@
   "image": "https://the-duke.org/headshot.png",
   "jobTitle": "Forward Deployed Engineer",
   "address": { "@type": "PostalAddress", "addressLocality": "Dallas", "addressRegion": "TX", "addressCountry": "US" },
-  "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Southern California" },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "Universidad Isabel I" },
+    { "@type": "CollegeOrUniversity", "name": "University of Southern California" }
+  ],
   "worksFor": { "@type": "Organization", "name": "Deloitte" },
   "sameAs": [
     "https://github.com/MatthewDuke1",
@@ -824,9 +827,9 @@ body.locked { overflow: hidden; }
           <p class="standfirst">
             Forward Deployed Engineer in Dallas. Ten years shipping AI, cloud &amp; cybersecurity
             products inside customer environments &mdash; at Deloitte by day, and on
-            <strong>three live products</strong> of my own the rest of the time. Every one of them
-            is small enough to understand in an afternoon and deployable to your own AWS account
-            in one command.
+            <strong>two live products</strong> of my own the rest of the time. Both are small
+            enough to understand in an afternoon, and one of them is on the Chrome Web Store with
+            more than 500 installs.
           </p>
           <div class="hero-actions">
             <button type="button" class="btn btn-solid" id="cvOpen" aria-haspopup="dialog" aria-controls="cvSheet">
@@ -872,9 +875,9 @@ body.locked { overflow: hidden; }
               <span class="figure-s">23 public &middot; 28 private</span>
             </div>
             <div class="figure">
-              <span class="figure-n">3</span>
+              <span class="figure-n">2</span>
               <span class="figure-k">Products live</span>
-              <span class="figure-s">Chrome Web Store &amp; the open web</span>
+              <span class="figure-s">Chrome Web Store &amp; in-house</span>
             </div>
           </div>
 
@@ -906,8 +909,9 @@ body.locked { overflow: hidden; }
 
           <p class="footnote">
             Client and internal work lives in <strong>private repositories</strong> and never
-            reaches the public graph, so the figures above undercount the real output. Everything
-            listed as a product below is public, running, and open to inspection.
+            reaches the public graph, so the figures above undercount the real output. Both
+            products below are running: Sula is public and open to inspection, Clapped is
+            in-house tooling.
           </p>
         </div>
       </section>
@@ -959,71 +963,6 @@ body.locked { overflow: hidden; }
                   then hands you the contact, the deadline, and the letter. Roughly
                   <strong>20 hours a year</strong> back, and nothing leaves your machine except a
                   license check.
-                </p>
-              </div>
-            </details>
-          </article>
-
-          <!-- Birthday app -->
-          <article class="entry">
-            <div class="entry-top">
-              <h2 class="entry-name"><a href="https://matthewduke1.github.io/birthday-reminder-gifting-app/" target="_blank" rel="noopener">Birthday Reminder</a></h2>
-              <span class="tag tag-live"><span class="dot" aria-hidden="true"></span> Live</span>
-              <span class="tag tag-push">Deploy your own</span>
-            </div>
-            <p class="entry-lede">
-              Emails you a week before a birthday, with Etsy and Amazon links already chosen from
-              how that person is filed &mdash; a sister gets <em>gifts for sister</em>; a note
-              saying <em>loves pottery</em> wins over the label. It runs on a schedule in AWS, so it
-              works whether or not a browser is open. Imports from Google Calendar, Apple Contacts,
-              Outlook, and CSV.
-            </p>
-            <p class="entry-facts">
-              <span><b>Stack</b> Lambda &middot; DynamoDB &middot; SES &middot; EventBridge &middot; CloudFormation</span>
-              <span><b>Runs at</b> $0.00&ndash;$0.50/mo</span>
-              <span><b>Setup</b> one command</span>
-            </p>
-            <div class="entry-links">
-              <a class="link-chip link-chip-em" href="https://matthewduke1.github.io/birthday-reminder-gifting-app/" target="_blank" rel="noopener">Open the app</a>
-              <a class="link-chip" href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app/tree/main/deploy" target="_blank" rel="noopener">Deploy to your AWS</a>
-              <a class="link-chip" href="https://github.com/MatthewDuke1/birthday-reminder-gifting-app" target="_blank" rel="noopener">Source</a>
-            </div>
-            <details class="note">
-              <summary>Run it in your own account <span class="note-tag">One command</span></summary>
-              <div class="note-body">
-                <p>
-                  The entire backend is a single CloudFormation template. It creates the table, both
-                  functions, the API, the daily schedule, and scoped IAM roles
-                  <strong>in your account</strong> &mdash; nothing reports back to mine.
-                </p>
-                <div class="snippet">aws cloudformation deploy \
-  --template-file deploy/template.yaml \
-  --stack-name bdayapp \
-  --capabilities CAPABILITY_IAM</div>
-                <ul>
-                  <li>Reminders at 7 days, 1 day, and day-of, sent server-side</li>
-                  <li>Cloud sync, so the list survives a cleared browser</li>
-                  <li>Import <code>.ics</code>, <code>.vcf</code>, or CSV; export CSV plus a restorable JSON backup</li>
-                  <li>No login step &mdash; the password is baked in at build time from a repo secret</li>
-                  <li>Idempotent sends: one marker per person, per year, per offset, so a retry never double-sends</li>
-                </ul>
-              </div>
-            </details>
-            <details class="note">
-              <summary>What it actually costs <span class="note-tag">Measured, not estimated</span></summary>
-              <div class="note-body">
-                <p>
-                  Every service is pay-per-request or inside a permanent free tier, and a
-                  household-sized list does not come close to exhausting either. Lambda, DynamoDB,
-                  API Gateway, EventBridge, SES and CloudWatch all land at zero. SES bills
-                  $0.10 per 1,000 emails, so thirty reminders a month rounds to nothing.
-                  <strong>Cost Explorer reports $0.00 against the live stack over the last 30 days.</strong>
-                </p>
-                <p>
-                  The only real costs are optional: a Route&nbsp;53 hosted zone ($0.50/mo) and a
-                  domain (~$12/yr), needed only if you want mail sent from your own domain &mdash;
-                  worth doing, since mail sent <em>as</em> a gmail.com address through SES fails
-                  Gmail's own DMARC policy and lands in spam.
                 </p>
               </div>
             </details>
@@ -1265,13 +1204,15 @@ body.locked { overflow: hidden; }
           Store; featured on Product Hunt, BetaList and JustLaunched with zero paid acquisition.
         </div>
         <div class="cv-kv">
-          <b>Birthday Reminder</b> &mdash; scheduled reminder service on Lambda, DynamoDB, SES and
-          EventBridge, deployable to a third-party AWS account in a single command.
+          <b>Clapped</b> &mdash; private video pipeline behind a YouTube channel. ffmpeg and bash;
+          holds a still or a short loop for the full runtime rather than rendering every frame, so
+          a ten-hour ambient render finishes on a laptop and stays small enough to upload.
         </div>
       </section>
 
       <section class="cv-sec">
         <h3>Education &amp; certifications</h3>
+        <div class="cv-kv"><b>MBA &amp; M.S., Artificial Intelligence for Business</b> &mdash; Universidad Isabel I (ENEB, Barcelona)</div>
         <div class="cv-kv"><b>B.S. Computer Science</b> &mdash; University of Southern California</div>
         <div class="cv-kv">
           Palantir Foundry &amp; AIP Builder Foundations &middot; AWS Certified Machine Learning &middot;

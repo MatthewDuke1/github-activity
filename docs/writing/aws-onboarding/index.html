@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Guardrails, Not Tutorials — Matt Duke</title>
+<meta name="description" content="Designing a Claude Agent Skill that gets a beginner onto AWS and back off it again. The constraint is trust, not knowledge — so the rule that must never bend is an exit code, not a paragraph." />
+<link rel="canonical" href="https://the-duke.org/writing/aws-onboarding/" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Guardrails, Not Tutorials" />
+<meta property="og:description" content="Every AWS tool built for an AI assistant starts after aws configure already works, and stops at a running stack. Those are the two ends a first-time user needs most." />
+<meta property="og:url" content="https://the-duke.org/writing/aws-onboarding/" />
+<meta name="twitter:card" content="summary" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Guardrails, Not Tutorials",
+  "description": "Designing an agent skill that gets a beginner onto AWS and back off it again.",
+  "author": { "@type": "Person", "name": "Matt Duke", "url": "https://the-duke.org/" },
+  "datePublished": "2026-09-06",
+  "url": "https://the-duke.org/writing/aws-onboarding/",
+  "license": "https://opensource.org/licenses/MIT"
+}
+</script>
+
+<style>
+/* ============================================================
+   Tokens — carried from the-duke.org so this page belongs to it.
+   ============================================================ */
+:root {
+  --ground:      #F7F5F1;
+  --surface:     #FFFFFF;
+  --surface-2:   #F0EDE7;
+  --rule:        #D9D4CA;
+  --rule-soft:   #E7E3DA;
+
+  --ink:         #16191F;
+  --ink-2:       #4A4F58;
+  --ink-3:       #7C8189;
+
+  --accent:      #B0741A;
+  --accent-soft: rgba(176, 116, 26, 0.10);
+  --accent-line: rgba(176, 116, 26, 0.30);
+
+  --live:        #2F7D52;
+  --live-soft:   rgba(47, 125, 82, 0.10);
+  --live-line:   rgba(47, 125, 82, 0.32);
+
+  --warn:        #9A5B00;
+  --warn-soft:   rgba(154, 91, 0, 0.10);
+
+  --term-bg:     #16191F;
+  --term-ink:    #D8DCE2;
+
+  --display: "Instrument Serif", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --body:    "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --measure: 66ch;
+  --gutter:  clamp(20px, 5vw, 48px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:      #0B0E14;
+    --surface:     #131822;
+    --surface-2:   #1A2029;
+    --rule:        #2A313D;
+    --rule-soft:   #1E242E;
+    --ink:         #ECEAE4;
+    --ink-2:       #A8AEB8;
+    --ink-3:       #737A85;
+    --accent:      #E8A33D;
+    --accent-soft: rgba(232, 163, 61, 0.11);
+    --accent-line: rgba(232, 163, 61, 0.32);
+    --live:        #4FB477;
+    --live-soft:   rgba(79, 180, 119, 0.12);
+    --live-line:   rgba(79, 180, 119, 0.34);
+    --warn:        #E8A33D;
+    --warn-soft:   rgba(232, 163, 61, 0.11);
+    --term-bg:     #060910;
+    --term-ink:    #D8DCE2;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:      #0B0E14;
+  --surface:     #131822;
+  --surface-2:   #1A2029;
+  --rule:        #2A313D;
+  --rule-soft:   #1E242E;
+  --ink:         #ECEAE4;
+  --ink-2:       #A8AEB8;
+  --ink-3:       #737A85;
+  --accent:      #E8A33D;
+  --accent-soft: rgba(232, 163, 61, 0.11);
+  --accent-line: rgba(232, 163, 61, 0.32);
+  --live:        #4FB477;
+  --live-soft:   rgba(79, 180, 119, 0.12);
+  --live-line:   rgba(79, 180, 119, 0.34);
+  --warn:        #E8A33D;
+  --warn-soft:   rgba(232, 163, 61, 0.11);
+  --term-bg:     #060910;
+  --term-ink:    #D8DCE2;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16.5px;
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- masthead, matching the site ---- */
+.masthead {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  max-width: 1080px; margin: 0 auto; padding: 22px var(--gutter) 20px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.wordmark a {
+  font-family: var(--display); font-size: 21px; color: var(--ink);
+  text-decoration: none; letter-spacing: .01em;
+}
+.wordmark a:hover { color: var(--accent); }
+.mast-nav { display: flex; align-items: center; gap: 20px; }
+.mast-nav a {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-3); text-decoration: none;
+}
+.mast-nav a:hover { color: var(--accent); }
+.theme-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; padding: 0; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; color: var(--ink-2);
+}
+.theme-btn:hover { color: var(--accent); border-color: var(--accent-line); }
+.theme-btn svg { fill: currentColor; }
+.theme-btn .moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-btn .moon { display: block; }
+  :root:not([data-theme="light"]) .theme-btn .sun  { display: none; }
+}
+:root[data-theme="dark"] .theme-btn .moon { display: block; }
+:root[data-theme="dark"] .theme-btn .sun  { display: none; }
+
+/* ---- article ---- */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter) 96px; }
+article { max-width: var(--measure); margin: 0 auto; }
+
+.eyebrow {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--accent);
+  margin: 56px 0 18px;
+}
+h1 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(2.4rem, 6.4vw, 3.7rem); line-height: 1.04;
+  letter-spacing: -.012em; margin: 0 0 16px; text-wrap: balance;
+}
+.deck {
+  font-family: var(--display); font-style: italic;
+  font-size: clamp(1.1rem, 2.4vw, 1.38rem); line-height: 1.46;
+  color: var(--ink-2); margin: 0 0 26px; text-wrap: balance;
+}
+.dateline {
+  display: flex; flex-wrap: wrap; gap: 7px 18px; align-items: center;
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink-3);
+  padding-bottom: 26px; border-bottom: 1px solid var(--rule);
+}
+.dateline a { color: var(--accent); text-decoration: none; }
+.dateline a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+h2 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(1.6rem, 3.6vw, 2.1rem); line-height: 1.16; letter-spacing: -.008em;
+  margin: 52px 0 14px; text-wrap: balance;
+}
+h2 .num {
+  font-family: var(--mono); font-size: .5em; font-weight: 500;
+  color: var(--accent); letter-spacing: .08em; margin-right: 10px; vertical-align: .18em;
+}
+h3 {
+  font-family: var(--body); font-weight: 600; font-size: 1.02rem;
+  margin: 32px 0 8px; letter-spacing: -.003em;
+}
+p { margin: 0 0 17px; }
+article ul, article ol { padding-left: 22px; margin: 0 0 17px; }
+li { margin-bottom: 9px; }
+a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+strong { font-weight: 600; color: var(--ink); }
+em { font-style: italic; }
+code {
+  font-family: var(--mono); font-size: .85em;
+  background: var(--surface-2); border: 1px solid var(--rule-soft);
+  padding: 1.5px 5px; border-radius: 3px;
+}
+hr.div { border: 0; height: 1px; background: var(--rule); margin: 52px 0; }
+
+/* ---- lead paragraph ---- */
+.lede { font-size: 1.08rem; color: var(--ink-2); }
+
+/* ---- coverage diagram ---- */
+.coverage {
+  margin: 26px 0 10px; padding: 22px 20px 18px;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
+}
+.cov-track { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.cov-cell {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .04em;
+  text-align: center; padding: 11px 4px; border-radius: 5px; border: 1px solid;
+}
+.cov-gap  { color: var(--warn); background: var(--warn-soft); border-color: var(--warn); border-style: dashed; }
+.cov-done { color: var(--live); background: var(--live-soft); border-color: var(--live-line); }
+.cov-labels { display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 6px; margin-top: 10px; }
+.cov-label {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em;
+  text-transform: uppercase; text-align: center; padding-top: 8px;
+  border-top: 1px solid var(--rule);
+}
+.cov-label.gap  { color: var(--warn); }
+.cov-label.done { color: var(--live); }
+.cov-note { font-size: 13.5px; color: var(--ink-3); margin: 14px 0 0; text-align: center; }
+
+/* ---- code / tree / checklist ---- */
+pre {
+  font-family: var(--mono); font-size: 12.6px; line-height: 1.72;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-line);
+  border-radius: 6px; padding: 15px 17px; overflow-x: auto;
+  margin: 22px 0; color: var(--ink-2);
+}
+pre b { color: var(--ink); font-weight: 600; }
+pre i { color: var(--ink-3); font-style: normal; }
+pre.term {
+  background: var(--term-bg); color: var(--term-ink);
+  border-color: var(--rule); border-left-color: var(--accent);
+}
+
+/* ---- rules list ---- */
+.rules { list-style: none; padding: 0 !important; margin: 24px 0 !important; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; }
+.rules li { margin: 0; background: var(--surface); padding: 15px 18px; }
+.rules b { display: block; margin-bottom: 4px; color: var(--ink); font-weight: 600; font-size: 15.2px; }
+.rules span { display: block; color: var(--ink-2); font-size: 14.4px; line-height: 1.6; }
+
+/* ---- table ---- */
+.twrap { overflow-x: auto; margin: 24px 0; border: 1px solid var(--rule); border-radius: 7px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14.2px; min-width: 480px; }
+th {
+  text-align: left; font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+  padding: 12px 15px; background: var(--surface-2); border-bottom: 1px solid var(--rule);
+}
+td { padding: 12px 15px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-2); vertical-align: top; }
+td:first-child { color: var(--ink); font-weight: 500; }
+tr:last-child td { border-bottom: none; }
+
+/* ---- pull quote ---- */
+.pull {
+  margin: 30px 0; padding: 4px 0 4px 22px;
+  border-left: 3px solid var(--accent);
+  font-family: var(--display); font-size: 1.3rem; line-height: 1.4; color: var(--ink);
+}
+
+/* ---- limitations ---- */
+.limits { list-style: none; padding: 0 !important; margin: 22px 0 !important; }
+.limits li {
+  padding-left: 26px; position: relative; margin-bottom: 13px; color: var(--ink-2);
+}
+.limits li::before {
+  content: "—"; position: absolute; left: 0; top: 0;
+  font-family: var(--mono); color: var(--warn);
+}
+.limits b { color: var(--ink); }
+
+/* ---- footer ---- */
+.colophon {
+  max-width: var(--measure); margin: 60px auto 0; padding-top: 26px;
+  border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-3);
+}
+.colophon .who { font-family: var(--display); font-size: 1.15rem; color: var(--ink); margin: 0 0 6px; }
+.colophon .links { display: flex; flex-wrap: wrap; gap: 8px 16px; font-family: var(--mono); font-size: 11.5px; margin-top: 12px; }
+
+@media (max-width: 640px) {
+  .cov-track { grid-template-columns: 1fr 1fr; }
+  .cov-labels { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wordmark"><a href="https://the-duke.org/">Matt Duke</a></div>
+  <nav class="mast-nav" aria-label="Sections">
+    <a href="https://the-duke.org/#work">Work</a>
+    <a href="https://the-duke.org/#activity">Activity</a>
+    <a href="https://the-duke.org/#contact">Contact</a>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="Switch colour theme">
+      <svg class="sun" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0V3.5A.75.75 0 0 1 8 2.75Zm0 9a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0V12.5a.75.75 0 0 1 .75-.75ZM2.75 8a.75.75 0 0 1 .75-.75H4a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 2.75 8Zm9.25 0a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 12 8ZM4.11 4.11a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 1 1-1.06 1.06l-.35-.35a.75.75 0 0 1 0-1.06Zm6.37 6.37a.75.75 0 0 1 1.06 0l.35.35a.75.75 0 1 1-1.06 1.06l-.35-.35a.75.75 0 0 1 0-1.06Zm1.41-6.37a.75.75 0 0 1 0 1.06l-.35.35a.75.75 0 0 1-1.06-1.06l.35-.35a.75.75 0 0 1 1.06 0ZM5.52 10.48a.75.75 0 0 1 0 1.06l-.35.35a.75.75 0 0 1-1.06-1.06l.35-.35a.75.75 0 0 1 1.06 0Z"/></svg>
+      <svg class="moon" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M9.598 1.591a.75.75 0 0 1 .785-.175 7 7 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Z"/></svg>
+    </button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <article>
+
+    <p class="eyebrow">Writing · Agent skills</p>
+    <h1>Guardrails, Not Tutorials</h1>
+    <p class="deck">Designing an agent skill that gets a beginner onto AWS &mdash; and back off it again</p>
+    <div class="dateline">
+      <span>Matt Duke</span>
+      <span>Dallas, TX</span>
+      <span>2026</span>
+      <a href="https://github.com/MatthewDuke1/aws-onboarding">github.com/MatthewDuke1/aws-onboarding</a>
+      <span>MIT</span>
+    </div>
+
+    <h2>Summary</h2>
+    <p class="lede">
+      Every AWS tool built for an AI assistant starts after <code>aws configure</code> already works,
+      and stops at a running stack. Those are exactly the two ends a first-time user needs most:
+      getting to working credentials without leaking one, and getting back to zero without a
+      surprise bill.
+    </p>
+    <p>
+      <code>aws-onboarding</code> is a Claude Agent Skill that fills both. It is a 212-line
+      instruction file, eight on-demand reference guides, one Python preflight script, and a
+      behavioral test suite. The interesting part is not the AWS content &mdash; Claude already
+      knows AWS. It is the enforcement model: the one rule that must never bend is implemented as
+      an exit code rather than a paragraph.
+    </p>
+
+    <hr class="div" />
+
+    <h2><span class="num">01</span>The gap</h2>
+    <p>Look at what already exists.</p>
+    <p>
+      AWS's own <strong>Deploy on AWS</strong> plugin documents its prerequisites plainly: an
+      account, working credentials, the CLI installed. It does not cover account creation, IAM,
+      MFA, billing alarms, or teardown. <strong>HashiCorp's Terraform agent skills</strong> are
+      written for people who build Terraform providers for a living. The dozens of community AWS
+      skill packs are service references &mdash; DynamoDB, IAM, CloudWatch &mdash; aimed at someone
+      who already has a console open.
+    </p>
+    <p>So the coverage looks like this:</p>
+
+    <figure class="coverage">
+      <div class="cov-track">
+        <div class="cov-cell cov-gap">account</div>
+        <div class="cov-cell cov-gap">credentials</div>
+        <div class="cov-cell cov-done">deploy</div>
+        <div class="cov-cell cov-done">operate</div>
+        <div class="cov-cell cov-gap">teardown</div>
+      </div>
+      <div class="cov-labels">
+        <div class="cov-label gap">Nobody covers this</div>
+        <div class="cov-label done">Everything covers this</div>
+        <div class="cov-label gap">Nobody</div>
+      </div>
+      <figcaption class="cov-note">Existing tooling clusters in the middle. The ends are where beginners fail.</figcaption>
+    </figure>
+
+    <p>
+      Both uncovered ends fail the same way, and both fail silently. A beginner who
+      half-configures the CLI gets commands that appear to succeed while hitting the wrong account
+      or region. A beginner who finishes a tutorial gets a NAT gateway they will discover on a
+      credit card statement fourteen months later.
+    </p>
+
+    <h2><span class="num">02</span>The reframe: the constraint is trust, not knowledge</h2>
+    <p>
+      The obvious way to build this skill is to write a very good AWS tutorial and hand it to the
+      model.
+    </p>
+    <p>
+      That would be wasted effort. Claude can already explain IAM, or Terraform state, or what a
+      stack is, on demand and better than most tutorials &mdash; because it can answer the
+      follow-up question. Knowledge is not scarce here.
+    </p>
+    <p>What stops people is trust. Three specific fears, all rational:</p>
+    <ul>
+      <li><strong>Cost you cannot see coming.</strong> The bill arrives a month after the mistake.</li>
+      <li><strong>Changes you cannot reverse.</strong> No undo button, and the delete path is genuinely harder than the create path.</li>
+      <li><strong>A console that never tells you what you already own.</strong> Fifty services, thirty regions, no single view of "what is running and what is it costing me."</li>
+    </ul>
+
+    <p class="pull">
+      The useful thing to build is not another explanation. It is a set of guardrails that make the
+      fears unfounded, and then say so.
+    </p>
+
+    <p>
+      This is the same reframe that shows up in enterprise deployment work, incidentally. The
+      blocker on a platform rollout is almost never that the customer does not understand the
+      product. It is that nobody has made the first irreversible step safe to take.
+    </p>
+
+    <h2><span class="num">03</span>The non-negotiables</h2>
+    <p>
+      Eight rules sit at the top of <code>SKILL.md</code> and explicitly override both convenience
+      and the user's own requests to skip ahead. The important ones:
+    </p>
+
+    <ul class="rules">
+      <li>
+        <b>A budget exists before any billable resource does.</b>
+        <span>No exceptions. A beginner's worst outcome is a surprise bill, not a slow tutorial.
+        Setting a zero-spend budget takes about two minutes and is the difference between a $3
+        mistake and a $300 one.</span>
+      </li>
+      <li>
+        <b>Never ask for, accept, or echo a secret.</b>
+        <span>No root passwords, no access key IDs, no MFA codes typed into a chat. If the user
+        pastes one anyway, the skill tells them to rotate it immediately and does not repeat it
+        back.</span>
+      </li>
+      <li>
+        <b>Prefer IAM Identity Center over long-lived access keys.</b>
+        <span>Static keys sitting in <code>~/.aws/credentials</code> are the single most common way
+        beginners get compromised. Access keys are a documented fallback, not the default, and the
+        skill says why when it falls back.</span>
+      </li>
+      <li>
+        <b>Never create without a teardown path.</b>
+        <span>Every create step names how to undo it, in the same message. Not in a section at the
+        end.</span>
+      </li>
+      <li>
+        <b>State cost before creating.</b>
+        <span>A number, and what drives it. "Roughly $0 while idle, about $18/month if you leave the
+        NAT gateway running" is useful. "Costs vary" is not.</span>
+      </li>
+      <li>
+        <b>One concept at a time.</b>
+        <span>Do not explain VPCs, IAM, and state files in one message.</span>
+      </li>
+    </ul>
+
+    <h2><span class="num">04</span>Architecture</h2>
+
+<pre><b>aws-onboarding/</b>
+├── <b>SKILL.md</b>          <i>212 lines: rules, 8-step workflow, routing table</i>
+├── <b>reference/</b>        <i>8 guides, loaded only when relevant</i>
+├── <b>scripts/</b>
+│   └── <b>preflight.py</b>  <i>the deterministic gate</i>
+└── <b>EVALS.md</b>          <i>behavioral test suite</i></pre>
+
+    <p>
+      <code>SKILL.md</code> is a router, not an encyclopedia. It holds the rules, the eight-step
+      workflow, and a table pointing at reference files. The eight guides &mdash; account setup,
+      credentials, guardrails, tool choice, CloudFormation, Terraform, teardown, troubleshooting
+      &mdash; are only read when the conversation actually needs them.
+    </p>
+    <p>
+      That is progressive disclosure, and it is the difference between a skill you leave installed
+      and one you uninstall. Having this one installed costs almost nothing in context until you
+      ask a question that pulls a guide in.
+    </p>
+    <p>
+      The workflow is eight steps, and Claude reproduces the checklist in its replies so the user
+      can see where they are:
+    </p>
+
+<pre>- [ ] Step 0: Work out where they actually are
+- [ ] Step 1: Account exists, root is locked down
+- [ ] Step 2: Sign-in works from the command line
+- [ ] Step 3: Spend guardrails in place
+- [ ] Step 4: Pick CloudFormation or Terraform
+- [ ] Step 5: Deploy the smallest real thing
+- [ ] Step 6: Change it, and watch the change apply
+- [ ] Step 7: Tear it down</pre>
+
+    <p>Three of those deserve a note.</p>
+    <p>
+      <strong>Step 0 asks whether an employer owns the account.</strong> In a company account the
+      user probably cannot create an IAM user or a budget, and the correct answer becomes "here is
+      the request to send your platform team, naming the account, region, and permissions."
+      Skipping this question walks someone straight into a permissions wall and leaves them
+      thinking they broke something.
+    </p>
+    <p>
+      <strong>Step 5 deploys something real, not hello world.</strong> An S3 static site or a
+      Lambda on a schedule &mdash; something they would plausibly keep, genuinely free at rest. The
+      template gets written <em>with</em> them, one line of explanation per block as it appears,
+      rather than pasted in as a 200-line starting point.
+    </p>
+    <p>
+      <strong>Step 7 is the whole point.</strong> A beginner who has never destroyed a stack does
+      not trust themselves to experiment. Teardown is not cleanup at the end of a tutorial; it is
+      the step that makes every previous step usable.
+    </p>
+
+    <h2><span class="num">05</span>Why the guardrail is an exit code</h2>
+    <p>
+      The budget rule is the one that has to hold under pressure, because the moment it matters is
+      exactly the moment the user is impatient. "Skip the setup stuff, just give me the Terraform"
+      is the realistic input.
+    </p>
+    <p>
+      A model can be talked out of a checklist. Instruction text is a strong prior, not a
+      constraint &mdash; enough conversational pressure, or enough distance from the top of the
+      context window, and it bends.
+    </p>
+    <p>So the check is not prose. Before any deploy:</p>
+
+<pre class="term">python scripts/preflight.py</pre>
+
+    <p>
+      It verifies the CLI is installed, credentials resolve, a region is set, a budget exists, and
+      the caller is not root. It prints a numbered list of problems with the exact fix for each,
+      and <strong>exits non-zero</strong> if anything is wrong.
+    </p>
+
+    <p class="pull">
+      A model can be reasoned past a paragraph. It cannot be reasoned past a return value.
+    </p>
+
+    <p>
+      That is the design decision worth stealing. Where a rule genuinely must not bend, move it out
+      of the prompt and into code the model executes and cannot argue with. Everything else in the
+      skill is guidance; this one thing is a gate.
+    </p>
+    <p>
+      The script needs Python 3.8+ and no third-party packages, because a beginner who has to
+      <code>pip install</code> something to run the safety check will not run the safety check.
+    </p>
+
+    <h2><span class="num">06</span>Evaluation</h2>
+    <p>
+      Anthropic's authoring guidance recommends writing evaluations before writing extensive
+      documentation. <code>EVALS.md</code> holds five scenarios, each run against a fresh Claude
+      instance with a baseline established <em>without</em> the skill first &mdash; otherwise you
+      cannot tell whether the skill is doing anything.
+    </p>
+
+    <div class="twrap">
+      <table>
+        <thead><tr><th>Scenario</th><th>What it tests</th></tr></thead>
+        <tbody>
+          <tr><td>Absolute beginner, no account</td><td>Does it ask before instructing? Budget before resources? Teardown at the end?</td></tr>
+          <tr><td>The impatient user</td><td>Do the non-negotiables survive pressure &mdash; without flipping to a refusal loop?</td></tr>
+          <tr><td>Employer-owned account</td><td>Does it recognize a permissions wall instead of suggesting <code>AdministratorAccess</code>?</td></tr>
+          <tr><td>Teardown after the fact</td><td>Given "$40/month and I don't know why," does it reach for NAT gateway and RDS first?</td></tr>
+          <tr><td>Tool choice</td><td>Does it recommend, or produce a balanced-but-useless comparison?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      The impatient-user case is the one that matters most, and it has two failure modes, not one.
+      Silently skipping the budget is the obvious failure. Refusing to help until every step is
+      complete is the other, and it is just as bad &mdash; the skill should state the specific risk
+      once and then proceed if the user insists again.
+    </p>
+    <p>
+      Across all five, the watch list is: budget skipped under time pressure, secrets appearing in
+      the transcript, teardown treated as optional, jargon used before it is defined, reference
+      files never opened, and over-explaining on the larger models. When something fails, the fix
+      is to tighten the wording in <code>SKILL.md</code>, not to add more of it.
+    </p>
+
+    <h2><span class="num">07</span>Limitations</h2>
+    <p>Worth stating plainly.</p>
+    <ul class="limits">
+      <li><b>Claude Code only.</b> The skill shells out to the AWS CLI, so it does not work uploaded to the Claude API, which runs skills without network access.</li>
+      <li><b>The evals are run by hand.</b> There is no runner. That is a real gap.</li>
+      <li><b>It does not make AWS as easy as Vercel.</b> It is not. It makes it <em>reachable</em>, which is a different and smaller claim.</li>
+      <li><b>The preflight verifies configuration, not intent.</b> It confirms a budget exists. It cannot confirm the user understood what they are about to create.</li>
+    </ul>
+
+    <h2><span class="num">08</span>Why build it at all</h2>
+    <p>
+      Default deployments have consolidated onto Vercel, Netlify, and the other fully managed
+      platforms, and the reason was always the same: AWS cost more in operator attention than a
+      small project could justify.
+    </p>
+    <p>
+      That tradeoff was real. It is now mostly gone. With a capable model sitting next to you, AWS
+      resource management is no longer the tax it was &mdash; the knowledge gap that made managed
+      platforms the rational default has largely closed. What remains is the trust gap, and a trust
+      gap is a tooling problem.
+    </p>
+    <p>
+      Which is the general point. As models absorb the explanation half of technical onboarding,
+      the leverage moves to the parts that are not explanation: irreversibility, cost exposure, and
+      the confidence to take a first step. Those are built in code, not in prose.
+    </p>
+
+  </article>
+
+  <div class="colophon">
+    <p class="who">Matt Duke</p>
+    <p style="margin:0;color:var(--ink-2)">Forward Deployed Engineer &mdash; Dallas, TX.</p>
+    <div class="links">
+      <a href="https://the-duke.org">the-duke.org</a>
+      <a href="https://github.com/MatthewDuke1">github.com/MatthewDuke1</a>
+      <a href="https://www.linkedin.com/in/the-duke/">linkedin.com/in/the-duke</a>
+      <a href="https://github.com/MatthewDuke1/aws-onboarding">the skill</a>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var KEY = "duke-theme";
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+  } catch (e) {}
+
+  var themeBtn = document.getElementById("themeBtn");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var current = root.getAttribute("data-theme") || (systemDark ? "dark" : "light");
+      var next = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -575,7 +575,7 @@ tr:last-child td { border-bottom: none; }
     <h2><span class="num">07</span>Limitations</h2>
     <p>Worth stating plainly.</p>
     <ul class="limits">
-      <li><b>Claude Code only.</b> The skill shells out to the AWS CLI, so it does not work uploaded to the Claude API, which runs skills without network access.</li>
+      <li><b>The gate needs a shell.</b> <code>preflight.py</code> shells out to the AWS CLI, so on surfaces that run skills sandboxed it cannot execute. The guidance and reference guides work anywhere; there the skill falls back to having the user run the four checks and paste the output, and says so rather than assuming.</li>
       <li><b>The evals are run by hand.</b> There is no runner. That is a real gap.</li>
       <li><b>It does not make AWS as easy as Vercel.</b> It is not. It makes it <em>reachable</em>, which is a different and smaller claim.</li>
       <li><b>The preflight verifies configuration, not intent.</b> It confirms a budget exists. It cannot confirm the user understood what they are about to create.</li>

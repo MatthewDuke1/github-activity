@@ -4,12 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Matt Duke — Shipping Log</title>
-<meta name="description" content="Matt Duke — Forward Deployed Engineer in Dallas, TX. Two shipped products, 325 merged pull requests this year, and a browser extension past 500 installs." />
+<meta name="description" content="Matt Duke — Forward Deployed Engineer in Dallas, TX. 368 merged pull requests this year, built on a $20/month Claude Pro plan at a 580% ROI." />
 <link rel="canonical" href="https://the-duke.org/" />
 
 <meta property="og:type" content="profile" />
 <meta property="og:title" content="Matt Duke — Shipping Log" />
-<meta property="og:description" content="Forward Deployed Engineer. Two shipped products, 325 merged pull requests this year, one live on the Chrome Web Store." />
+<meta property="og:description" content="Forward Deployed Engineer. 368 merged pull requests this year on a $20/month Claude Pro plan &mdash; a 580% return." />
 <meta property="og:url" content="https://the-duke.org/" />
 <meta property="og:image" content="https://the-duke.org/headshot.png" />
 <meta name="twitter:card" content="summary" />
@@ -339,6 +339,40 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 .portrait:hover { filter: grayscale(0) contrast(1); }
 @media (max-width: 780px) { .portrait { width: 116px; } }
+
+/* ROI callout — the headline figure, set in the hero */
+.roi {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px clamp(18px, 3vw, 28px);
+  align-items: center;
+  max-width: 62ch;
+  margin-top: 32px;
+  padding: 20px 22px;
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 3px 3px 0;
+}
+.roi-n {
+  font-family: var(--display);
+  font-size: clamp(3.4rem, 8vw, 4.6rem);
+  line-height: .9;
+  letter-spacing: -0.025em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.roi-n .unit { font-size: .5em; vertical-align: super; margin-left: 2px; }
+.roi-k {
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink);
+}
+.roi-s { font-size: 14px; line-height: 1.55; color: var(--ink-2); margin-top: 6px; }
+.roi-s strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 520px) {
+  .roi { grid-template-columns: 1fr; }
+}
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
 
@@ -831,6 +865,19 @@ body.locked { overflow: hidden; }
             enough to understand in an afternoon, and one of them is on the Chrome Web Store with
             more than 500 installs.
           </p>
+          <div class="roi">
+            <p class="roi-n">580<span class="unit">%</span></p>
+            <div class="roi-body">
+              <p class="roi-k">ROI on a $20/month Claude Pro plan</p>
+              <p class="roi-s">
+                Everything on this page &mdash; 368 merged PRs, two live products, a Chrome
+                extension past 500 installs &mdash; came out of one engineer &amp; one
+                <strong>$20 Claude subscription</strong>. That is what forward deployment looks like
+                to me: find the problem, ship the fix, make the tooling pay for itself.
+                <strong>Imagine what I could do with your organization.</strong>
+              </p>
+            </div>
+          </div>
           <div class="hero-actions">
             <button type="button" class="btn btn-solid" id="cvOpen" aria-haspopup="dialog" aria-controls="cvSheet">
               <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 8 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
@@ -860,19 +907,19 @@ body.locked { overflow: hidden; }
         <div>
           <div class="figures">
             <div class="figure">
-              <span class="figure-n">325</span>
+              <span class="figure-n">368</span>
               <span class="figure-k">Merged PRs, 2026</span>
-              <span class="figure-s">362 merged all time</span>
+              <span class="figure-s">405 merged all time</span>
             </div>
             <div class="figure">
-              <span class="figure-n">478</span>
-              <span class="figure-k">Contributions, 2026</span>
-              <span class="figure-s">236 commits &middot; 235 PRs opened</span>
+              <span class="figure-n">831</span>
+              <span class="figure-k">Contributions, last 12 months</span>
+              <span class="figure-s">377 commits &middot; 431 PRs opened in 2026</span>
             </div>
             <div class="figure">
-              <span class="figure-n">51</span>
+              <span class="figure-n">54</span>
               <span class="figure-k">Repositories</span>
-              <span class="figure-s">23 public &middot; 28 private</span>
+              <span class="figure-s">23 public &middot; 31 private</span>
             </div>
             <div class="figure">
               <span class="figure-n">2</span>
@@ -883,35 +930,36 @@ body.locked { overflow: hidden; }
 
           <div class="spark">
             <div class="spark-head">
-              <span>Contributions by month</span>
+              <span>Commits &amp; PRs by month</span>
               <span>2026</span>
             </div>
-            <div class="spark-bars" role="img" aria-label="Monthly contributions in 2026: January none, February none, March none, April 81, May 31, June 129, July 71, August 141, September 25 so far.">
+            <div class="spark-bars" role="img" aria-label="Monthly commits and pull requests in 2026: January none, February none, March none, April 240, May 31, June 211, July 72, August 144, September 97, October 14 so far.">
               <div class="spark-bar" data-empty></div>
               <div class="spark-bar" data-empty></div>
               <div class="spark-bar" data-empty></div>
-              <div class="spark-bar" style="height:57%"></div>
-              <div class="spark-bar" style="height:22%"></div>
-              <div class="spark-bar" style="height:91%"></div>
-              <div class="spark-bar" style="height:50%"></div>
               <div class="spark-bar" style="height:100%"></div>
-              <div class="spark-bar" style="height:18%"></div>
+              <div class="spark-bar" style="height:13%"></div>
+              <div class="spark-bar" style="height:88%"></div>
+              <div class="spark-bar" style="height:30%"></div>
+              <div class="spark-bar" style="height:60%"></div>
+              <div class="spark-bar" style="height:40%"></div>
+              <div class="spark-bar" style="height:6%"></div>
             </div>
             <div class="spark-axis" aria-hidden="true">
               <span>J</span><span>F</span><span>M</span><span>A</span>
-              <span>M</span><span>J</span><span>J</span><span>A</span><span>S</span>
+              <span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span>
             </div>
             <p class="spark-note">
               The graph starts in April because that is when I started shipping my own products
-              rather than only client work. September is partial.
+              rather than only client work. October is partial.
             </p>
           </div>
 
           <p class="footnote">
             Client and internal work lives in <strong>private repositories</strong> and never
             reaches the public graph, so the figures above undercount the real output. Both
-            products below are running: Sula is public and open to inspection, Clapped is
-            in-house tooling.
+            products below are running: Sula is on the Chrome Web Store, Clapped is in-house
+            tooling. Both sources are private.
           </p>
         </div>
       </section>
@@ -947,7 +995,6 @@ body.locked { overflow: hidden; }
                 Install for Chrome
               </a>
               <a class="link-chip" href="https://trysula.com/" target="_blank" rel="noopener">trysula.com</a>
-              <a class="link-chip" href="https://github.com/MatthewDuke1/find-me-people" target="_blank" rel="noopener">Source</a>
             </div>
             <details class="note">
               <summary>Why it exists <span class="note-tag">Product thinking</span></summary>

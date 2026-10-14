@@ -8,10 +8,12 @@ Live at [matthewduke1.github.io/github-activity](https://matthewduke1.github.io/
 
 | Metric | Count |
 |--------|-------|
-| Merged Pull Requests (this year) | 73 |
-| Commits (lifetime, all repos) | 685 |
-| Private Repositories | 25 |
-| Hours Saved / Year (across apps) | 170+ |
+| ROI on a $20/month Claude Pro plan | 580% |
+| Merged Pull Requests (2026) | 368 |
+| Merged Pull Requests (all time) | 405 |
+| Contributions (last 12 months) | 831 |
+| Commits (lifetime, all repos) | 984 |
+| Repositories | 54 (23 public, 31 private) |
 
 ## Featured Apps
 

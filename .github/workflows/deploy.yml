@@ -1,0 +1,32 @@
+name: Deploy the-duke.org
+
+on:
+  push:
+    branches: [master]
+    paths: ["docs/**"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write # OIDC token for the AWS deploy role
+  contents: read
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Sync docs/ to S3
+        run: aws s3 sync docs "s3://${{ vars.SITE_BUCKET }}" --delete --exclude CNAME --cache-control "public, max-age=300"
+
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id "${{ vars.SITE_DISTRIBUTION_ID }}" --paths "/*"
